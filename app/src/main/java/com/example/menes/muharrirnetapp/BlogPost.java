@@ -1,45 +1,74 @@
 package com.example.menes.muharrirnetapp;
 
-import java.util.Date;
+import com.example.menes.muharrirnetapp.PictureHandling.Embedded;
+import com.google.gson.annotations.SerializedName;
+
+import java.util.List;
 
 public class BlogPost {
 
+    @SerializedName("id")
     private Integer postId;
-    private String title;
-    private String tag;
-    private String content;
+    @SerializedName("title") //Bence almıcak bunu. Title içinde bir de rendered yazıyor, yeni class gerekicek.
+    private PostTitle title;
+    @SerializedName("tags")
+    private List<String> tags;
+    @SerializedName("content") //Aynısı, yeni class lazım.
+    private PostContent content;
+    @SerializedName("author")
+    private String author; //neden sayı lan bu
+    @SerializedName("categories") // bu da
+    private List<String> categories;
+    @SerializedName("excerpt")
+    private PostExcerpt excerpt;
+    @SerializedName("date_gmt")
     private String date;
-    public String author;
+    @SerializedName("featured_media")
+    private Integer postPictureId;
+    @SerializedName("status")
+    private String status;
+    @SerializedName("_embedded")
+    private Embedded embedded;
 
-    // Kept this minimal. Can be extended.
-    public BlogPost(Integer postId, String date, String title, String content, String tag, String author)
+
+    // Kept this minimal. Can (WILL*) be extended.
+    public BlogPost(Embedded embedded, String status, Integer postPictureId, Integer postId, String date, PostTitle title, PostContent content, List<String> tags, String author, List<String> categories, PostExcerpt excerpt)
     {
+        this.embedded = embedded;
         this.postId = postId;
         this.date = date;
         this.title = title;
         this.content = content;
-        this.tag = tag;
+        this.tags = tags;
         this.author = author;
+        this.categories = categories;
+        this.excerpt = excerpt;
+        this.postPictureId = postPictureId;
+        this.status = status;
     }
 
-    public void setTag(String tag) {
-        this.tag = tag;
+    public Embedded getEmbedded() {
+        return embedded;
     }
 
-    public String getAuthor() {
-        return author;
+    public void setEmbedded(Embedded embedded) {
+        this.embedded = embedded;
     }
 
-    public void setAuthor(String author) {
-        this.author = author;
+    public Integer getPostPictureId() {
+        return postPictureId;
     }
 
-    public String getDate() {
-        return date;
+    public void setPostPictureId(Integer postPictureId) {
+        this.postPictureId = postPictureId;
     }
 
-    public void setDate(String date) {
-        this.date = date;
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
     }
 
     public Integer getPostId() {
@@ -50,24 +79,60 @@ public class BlogPost {
         this.postId = postId;
     }
 
-    public String getTitle() {
+    public PostTitle getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
+    public void setTitle(PostTitle title) {
         this.title = title;
     }
 
-    public String getContent() {
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    public PostContent getContent() {
         return content;
     }
 
-    public void setContent(String content) {
+    public void setContent(PostContent content) {
         this.content = content;
     }
 
-    public String getTag() {
-        return tag;
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public String getAuthor() {
+        return author;
+    }
+
+    public void setAuthor(String author) {
+        this.author = author;
+    }
+
+    public List<String> getCategories() {
+        return categories;
+    }
+
+    public void setCategories(List<String> categories) {
+        this.categories = categories;
+    }
+
+    public PostExcerpt getExcerpt() {
+        return excerpt;
+    }
+
+    public void setExcerpt(PostExcerpt excerpt) {
+        this.excerpt = excerpt;
     }
 }
 

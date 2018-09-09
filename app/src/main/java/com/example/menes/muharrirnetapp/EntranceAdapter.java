@@ -68,7 +68,7 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
       BlogPost row = myPosts.get(holder.getAdapterPosition());
 
 
-      if(row.getStatus().equals("publish")){
+      if(row.getStatus().equals("publish")) {
 
           holder.authorText.setText(row.getAuthor());
           holder.dateText.setText(row.getDate());
@@ -77,13 +77,18 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
 
           //TODO: WHY ONLY 10 POSTS ARE ENTERED, AND THOUGHTS ABOUT HOW DO WE PAGINATE IN OUR OWN APP? HOW MANY ON OUR MAIN SCREEN? ALL? 5?
 
-       Picasso.Builder builder = new Picasso.Builder(context);
-        builder.downloader(new OkHttp3Downloader(context));
-        builder.build().load(row.getEmbedded().getFeaturedMedia().get(1).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl())
-                .placeholder((R.drawable.ic_launcher_background))
-                .error(R.drawable.ic_launcher_background)
-                .into(holder.postImg);
+          if (row.getEmbedded() != null) {
 
+
+          //row.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl()
+
+          Picasso.Builder builder = new Picasso.Builder(context);
+          builder.downloader(new OkHttp3Downloader(context));
+          builder.build().load(row.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl())
+                  .placeholder((R.drawable.ic_launcher_background))
+                  .error(R.drawable.ic_launcher_background)
+                  .into(holder.postImg);
+          }
 
           holder.itemView.setOnClickListener(new View.OnClickListener() {
               @Override

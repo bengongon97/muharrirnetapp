@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity {
             public void onFailure(Call<List<BlogPost>> call, Throwable t) {
                 progressDialog.dismiss();
                 Toast.makeText(MainActivity.this, "Something went wrong...Please try again by swiping down!", Toast.LENGTH_SHORT).show();
-
             }
         });
     }

@@ -11,10 +11,11 @@ import retrofit2.http.Path;
 
 public interface GetDataService {
 
-    @GET("posts")
+    // http://muharrir.net/wp-json/wp/v2/posts?_embed
+    @GET("posts?_embed")
     Call<List<BlogPost>> getAllPosts();
 
-    @GET("posts/{id}")
+    @GET("posts?_embed/{id}")
     Call<List<BlogPost>> getPostContent(@Path("id") String postId);
 
     @GET("media/{pic}")

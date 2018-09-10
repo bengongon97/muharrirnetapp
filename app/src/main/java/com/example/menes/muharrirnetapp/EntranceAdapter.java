@@ -79,7 +79,7 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
 
        Picasso.Builder builder = new Picasso.Builder(context);
         builder.downloader(new OkHttp3Downloader(context));
-        builder.build().load(row.getEmbedded().getFeaturedMedia().get(1).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl())
+        builder.build().load(row.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl())
                 .placeholder((R.drawable.ic_launcher_background))
                 .error(R.drawable.ic_launcher_background)
                 .into(holder.postImg);

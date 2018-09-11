@@ -9,11 +9,11 @@ public class BlogPost {
 
     @SerializedName("id")
     private Integer postId;
-    @SerializedName("title") //Bence almıcak bunu. Title içinde bir de rendered yazıyor, yeni class gerekicek.
+    @SerializedName("title")
     private PostTitle title;
     @SerializedName("tags")
     private List<String> tags;
-    @SerializedName("content") //Aynısı, yeni class lazım.
+    @SerializedName("content")
     private PostContent content;
     @SerializedName("author")
     private String author; //neden sayı lan bu
@@ -21,7 +21,7 @@ public class BlogPost {
     private List<String> categories;
     @SerializedName("excerpt")
     private PostExcerpt excerpt;
-    @SerializedName("date_gmt")
+    @SerializedName("date")
     private String date;
     @SerializedName("featured_media")
     private Integer postPictureId;

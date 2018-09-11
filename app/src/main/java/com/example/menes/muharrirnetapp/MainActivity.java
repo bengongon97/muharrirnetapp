@@ -28,6 +28,8 @@ public class MainActivity extends AppCompatActivity {
     private EntranceAdapter entAdapter;
     SwipeRefreshLayout mySwipeRefresh;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -45,12 +47,11 @@ public class MainActivity extends AppCompatActivity {
                     public void onRefresh() {
                         // This method performs the actual data-refresh operation.
                         // The method calls setRefreshing(false) when it's finished.
-                       // callForGetAllPosts();
+                       // call.clone().enqueue(MainActivity.this);
                         mySwipeRefresh.setRefreshing(false); //NOT YET IMPLEMENTED.
                     }
                 }
         );
-
 
         callForGetAllPosts();
     }
@@ -67,7 +68,6 @@ public class MainActivity extends AppCompatActivity {
                 if (response.isSuccessful()){
                     rows = response.body();
                    generateDataList(rows);
-
                 }
                 else
                     Toast.makeText(MainActivity.this, "Response was not successful...Please try later!", Toast.LENGTH_SHORT).show();
@@ -86,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         entrance = findViewById(R.id.mainRecyclerView);
         entAdapter = new EntranceAdapter(this,rowsForBlog);
         entrance.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-//      entAdapter.setOnItemClickListener((EntranceAdapter.OnItemClickListener) this);
+       // entAdapter.setOnItemClickListener((EntranceAdapter.OnItemClickListener) MainActivity.this);
         entrance.setAdapter(entAdapter);
     }
 

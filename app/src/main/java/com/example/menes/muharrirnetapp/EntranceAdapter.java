@@ -1,8 +1,10 @@
 package com.example.menes.muharrirnetapp;
 
 import android.content.Context;
+import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +12,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.json.JSONObject;
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
 
+import org.w3c.dom.Text;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.EntranceView> {
 
@@ -35,19 +46,17 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
 
     //not sure if we need all of them OR why we need these.
     class EntranceView extends RecyclerView.ViewHolder {
-        TextView tagsText;
         TextView authorText;
         TextView dateText;
         TextView descText;
         TextView titleText;
         ImageView postImg;
-        LinearLayout lnrLayout;
+        TextView categoriesText;
 
-        public EntranceView(View itemView) {
+        private EntranceView(View itemView) {
             super(itemView);
 
-            lnrLayout =  itemView.findViewById(R.id.mainLayout);
-            tagsText = itemView.findViewById(R.id.tagsText);
+            categoriesText =  itemView.findViewById(R.id.categoriesText);
             authorText = itemView.findViewById(R.id.authorText);
             dateText = itemView.findViewById(R.id.dateText);
             descText = itemView.findViewById(R.id.postDescription);
@@ -60,29 +69,81 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
     @Override
     public EntranceView onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View layoutView = LayoutInflater.from(parent.getContext()).inflate(R.layout.in_main, parent, false);
-        EntranceView entranceView = new EntranceView(layoutView);
-        return entranceView;
+        return new EntranceView(layoutView);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull EntranceView holder, final int position) {
+    public void onBindViewHolder(@NonNull final EntranceView holder, final int position) {
 
-        BlogPost row = myPosts.get(position);
-        holder.tagsText.setText(row.getTag());
-        holder.authorText.setText(row.getAuthor());
-        holder.dateText.setText(row.getDate().toString());
-        holder.titleText.setText(row.getTitle());
+      BlogPost row = myPosts.get(holder.getAdapterPosition());
 
-        //todo: Not sure how to handle the image, it comes as  "featured_media": 339 or sth like that.
 
-        holder.itemView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(onItemClickListener != null) {
-                    onItemClickListener.onItemClick(position);
-                }
-            }
-        });
+      if(row.getStatus().equals("publish")) {
+
+          holder.authorText.setText(row.getEmbedded().getAuthor().get(0).getName());
+
+          holder.titleText.setText(row.getTitle().getPostTitle());
+          holder.descText.setText(row.getExcerpt().getPostExcerpt());
+
+          if(row.getEmbedded().getCategoryAndTags().get(0).size() != 0) {
+              for (int i = 0; i < row.getEmbedded().getCategoryAndTags().get(0).size(); i++) {
+
+                  String x = row.getEmbedded().getCategoryAndTags().get(0).get(i).getCategoryName() + " ,";
+//TODO: ARRAYLERDEN BİRER TANE ÖZELLİK LAZIM. CATEGORYNAME SADECE. AMA ŞİMDİ İKİ TANE (ya da daha fazla) ARRAYDEN SADECE BİR ÖZELLİK ÇEKİLİP ARALARINDA VİRGÜL OLACAK ŞEKİLDE SIRALANMALI. NASIL YAPARIZ?? KAFAM ÇALIŞMADI.
+                  //s.substring(0, s.length() - 2)
+                  //NOW, IT'LL ONLY DISPLAY LAST TAG.
+                  holder.categoriesText.setText(x);
+              }
+          }
+
+
+          String date = row.getDate();
+          if(Build.VERSION.SDK_INT > 25 && row.getDate() != null) {
+
+              DateTimeFormatter parseFormatter
+                      = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+              DateTimeFormatter newFormatter
+                      = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+              String resultDate = LocalDateTime.parse(date, parseFormatter).format(newFormatter);
+
+              holder.dateText.setText(resultDate);
+          }
+          else{
+              holder.dateText.setText(row.getDate());
+          }
+
+          //TODO: WHY ONLY 10 POSTS ARE ENTERED, AND THOUGHTS ABOUT HOW DO WE PAGINATE IN OUR OWN APP? HOW MANY ON OUR MAIN SCREEN? ALL? 5?
+
+          if (row.getEmbedded() != null) {
+
+          //row.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl()
+
+          Picasso.Builder builder = new Picasso.Builder(context);
+          builder.downloader(new OkHttp3Downloader(context));
+
+             if(row.getEmbedded().getFeaturedMedia() != null){
+                 builder.build().load(row.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl())
+                        .placeholder((R.drawable.ic_launcher_background))
+                        .error(R.drawable.ic_launcher_background)
+                        .into(holder.postImg);
+             }
+             else{
+                 holder.postImg.setImageResource(R.drawable.muharrir_logo);
+                 holder.postImg.setMaxHeight(150);
+                 holder.postImg.setMaxWidth(150);
+             }
+
+          }
+
+          holder.itemView.setOnClickListener(new View.OnClickListener() {
+              @Override
+              public void onClick(View v) {
+                  if(onItemClickListener != null) {
+                      onItemClickListener.onItemClick(holder.getAdapterPosition());
+                  }
+              }
+          });
+      }
     }
 
     @Override

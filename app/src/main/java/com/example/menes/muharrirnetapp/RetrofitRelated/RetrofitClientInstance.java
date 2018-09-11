@@ -1,4 +1,4 @@
-package com.example.menes.muharrirnetapp;
+package com.example.menes.muharrirnetapp.RetrofitRelated;
 
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;

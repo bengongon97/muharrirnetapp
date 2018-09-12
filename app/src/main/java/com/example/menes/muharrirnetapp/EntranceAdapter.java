@@ -1,6 +1,7 @@
 package com.example.menes.muharrirnetapp;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,9 +12,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.text.Html;
 
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
+
+
 
 import org.w3c.dom.Text;
 
@@ -75,7 +79,7 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
     @Override
     public void onBindViewHolder(@NonNull final EntranceView holder, final int position) {
 
-      BlogPost row = myPosts.get(holder.getAdapterPosition());
+      final BlogPost row = myPosts.get(holder.getAdapterPosition());
 
 
       if(row.getStatus().equals("publish")) {
@@ -83,19 +87,20 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
           holder.authorText.setText(row.getEmbedded().getAuthor().get(0).getName());
 
           holder.titleText.setText(row.getTitle().getPostTitle());
-          holder.descText.setText(row.getExcerpt().getPostExcerpt());
+          String formattedExcerpt = Html.fromHtml(row.getExcerpt().getPostExcerpt()).toString();
+          holder.descText.setText(formattedExcerpt);
 
           if(row.getEmbedded().getCategoryAndTags().get(0).size() != 0) {
               for (int i = 0; i < row.getEmbedded().getCategoryAndTags().get(0).size(); i++) {
 
                   String x = row.getEmbedded().getCategoryAndTags().get(0).get(i).getCategoryName() + " ,";
-//TODO: ARRAYLERDEN BİRER TANE ÖZELLİK LAZIM. CATEGORYNAME SADECE. AMA ŞİMDİ İKİ TANE (ya da daha fazla) ARRAYDEN SADECE BİR ÖZELLİK ÇEKİLİP ARALARINDA VİRGÜL OLACAK ŞEKİLDE SIRALANMALI. NASIL YAPARIZ?? KAFAM ÇALIŞMADI.
+                  //TODO: ARRAYLERDEN BİRER TANE ÖZELLİK LAZIM. CATEGORYNAME SADECE. AMA ŞİMDİ İKİ TANE (ya da daha fazla)
+                  //todo: ARRAYDEN SADECE BİR ÖZELLİK ÇEKİLİP ARALARINDA VİRGÜL OLACAK ŞEKİLDE SIRALANMALI. NASIL YAPARIZ?? KAFAM ÇALIŞMADI.
                   //s.substring(0, s.length() - 2)
                   //NOW, IT'LL ONLY DISPLAY LAST TAG.
                   holder.categoriesText.setText(x);
               }
           }
-
 
           String date = row.getDate();
           if(Build.VERSION.SDK_INT > 25 && row.getDate() != null) {
@@ -111,8 +116,6 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
           else{
               holder.dateText.setText(row.getDate());
           }
-
-          //TODO: WHY ONLY 10 POSTS ARE ENTERED, AND THOUGHTS ABOUT HOW DO WE PAGINATE IN OUR OWN APP? HOW MANY ON OUR MAIN SCREEN? ALL? 5?
 
           if (row.getEmbedded() != null) {
 
@@ -140,6 +143,7 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
               public void onClick(View v) {
                   if(onItemClickListener != null) {
                       onItemClickListener.onItemClick(holder.getAdapterPosition());
+
                   }
               }
           });

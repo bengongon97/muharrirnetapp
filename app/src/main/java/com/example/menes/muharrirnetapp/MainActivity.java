@@ -58,8 +58,15 @@ public class MainActivity extends AppCompatActivity {
 
     private void callForGetAllPosts () {
 
+        //todo: Read here xd
+        // Only 10 posts because that's the page size. now we can do paging but we need to use scrollview
+        // or handle by page numbers (new page for each page number) but I vote for scrollview.
+
+        Integer pageNo = 1;
+        String page = pageNo.toString();
+
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-        Call<List<BlogPost>> call = service.getAllPosts();
+        Call<List<BlogPost>> call = service.getAllPosts(page);
 
         call.enqueue(new Callback<List<BlogPost>>() {
             @Override

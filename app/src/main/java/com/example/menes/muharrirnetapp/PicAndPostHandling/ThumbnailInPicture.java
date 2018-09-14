@@ -1,13 +1,13 @@
-package com.example.menes.muharrirnetapp.PictureHandling;
+package com.example.menes.muharrirnetapp.PicAndPostHandling;
 
 import com.google.gson.annotations.SerializedName;
 
-public class MediumLarge {
+public class ThumbnailInPicture {
 
     @SerializedName("source_url")
     private String sourceUrl;
 
-    public MediumLarge(String sourceUrl) {
+    public ThumbnailInPicture(String sourceUrl){
         this.sourceUrl = sourceUrl;
     }
 

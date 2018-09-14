@@ -29,7 +29,7 @@ import java.util.Locale;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
-public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.EntranceView> {
+public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.EntranceView>{
 
     public interface OnItemClickListener {
         void onItemClick (int position);
@@ -49,7 +49,7 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
     }
 
     //not sure if we need all of them OR why we need these.
-    class EntranceView extends RecyclerView.ViewHolder {
+    class EntranceView extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView authorText;
         TextView dateText;
         TextView descText;
@@ -59,13 +59,21 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
 
         private EntranceView(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
 
-            categoriesText =  itemView.findViewById(R.id.categoriesText);
+            categoriesText = itemView.findViewById(R.id.categoriesText);
             authorText = itemView.findViewById(R.id.authorText);
             dateText = itemView.findViewById(R.id.dateText);
             descText = itemView.findViewById(R.id.postDescription);
             titleText = itemView.findViewById(R.id.postTitle);
             postImg = itemView.findViewById(R.id.postImg);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (onItemClickListener != null) {
+                onItemClickListener.onItemClick(R.id.postImg);
+            }
         }
     }
 
@@ -91,15 +99,14 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
           holder.descText.setText(formattedExcerpt);
 
           if(row.getEmbedded().getCategoryAndTags().get(0).size() != 0) {
+              StringBuilder xd = new StringBuilder();
+              String xdd = "";
               for (int i = 0; i < row.getEmbedded().getCategoryAndTags().get(0).size(); i++) {
-
-                  String x = row.getEmbedded().getCategoryAndTags().get(0).get(i).getCategoryName() + " ,";
-                  //TODO: ARRAYLERDEN BİRER TANE ÖZELLİK LAZIM. CATEGORYNAME SADECE. AMA ŞİMDİ İKİ TANE (ya da daha fazla)
-                  //todo: ARRAYDEN SADECE BİR ÖZELLİK ÇEKİLİP ARALARINDA VİRGÜL OLACAK ŞEKİLDE SIRALANMALI. NASIL YAPARIZ?? KAFAM ÇALIŞMADI.
-                  //s.substring(0, s.length() - 2)
-                  //NOW, IT'LL ONLY DISPLAY LAST TAG.
-                  holder.categoriesText.setText(x);
+                  xd.append(row.getEmbedded().getCategoryAndTags().get(0).get(i).getCategoryName());
+                  xd.append(", ");
               }
+              xdd =  xd.toString().substring(0, xd.length() - 2);
+              holder.categoriesText.setText(xdd);
           }
 
           String date = row.getDate();
@@ -142,8 +149,8 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
               @Override
               public void onClick(View v) {
                   if(onItemClickListener != null) {
+                      //onItemClickListener.onItemClick(position); //
                       onItemClickListener.onItemClick(holder.getAdapterPosition());
-
                   }
               }
           });

@@ -1,34 +1,156 @@
 package com.example.menes.muharrirnetapp;
 
+import android.app.ProgressDialog;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.menes.muharrirnetapp.RetrofitRelated.GetDataService;
 import com.example.menes.muharrirnetapp.RetrofitRelated.RetrofitClientInstance;
+import com.squareup.picasso.OkHttp3Downloader;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
-class PostActivity extends AppCompatActivity {
+public class PostActivity extends AppCompatActivity {
+
+    ProgressDialog progressDialog; //DEPRECATED! OMG!
+    BlogPost gottenPost;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        String postId= getIntent().getStringExtra("EXTRA_SESSION_ID");
+        progressDialog = new ProgressDialog(PostActivity.this);
+        progressDialog.setMessage("Loading....");
+        progressDialog.show();
 
-        getPostWithId(postId);
+        final ImageView postFeaturedImage = findViewById(R.id.postFeaturedImage);
+        final TextView postTitle = findViewById(R.id.postTitle);
+        final TextView dateAuthorCategories = findViewById(R.id.dateAuthorCategories);
+        final TextView postContent = findViewById(R.id.postContent);
+        final TextView tags = findViewById(R.id.tags);
+        TextView commentsAndSoOn = findViewById(R.id.comments);
 
+
+        String postId= getIntent().getStringExtra("postId");
+
+
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        Call<BlogPost> call = service.getPostContent(postId);
+
+        call.enqueue(new Callback<BlogPost>() {
+            @Override
+            public void onResponse(Call<BlogPost> call, Response<BlogPost> response) {
+                progressDialog.dismiss();
+                if (response.isSuccessful()){
+                    gottenPost = response.body();
+
+                    Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
+                    builder.downloader(new OkHttp3Downloader(PostActivity.this));
+                    if(gottenPost.getEmbedded().getFeaturedMedia() != null) {
+                        builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumLarge().getSourceUrl())
+                                .placeholder((R.drawable.ic_launcher_background))
+                                .error(R.drawable.ic_launcher_background)
+                                .into(postFeaturedImage);
+
+
+                        postTitle.setText(gottenPost.getTitle().getPostTitle());
+
+
+
+                        String formattedExcerptinPost = Html.fromHtml(gottenPost.getContent().getPostContent()).toString();
+                        postContent.setText(formattedExcerptinPost);
+
+
+
+
+                        String date = gottenPost.getDate();
+                        if(Build.VERSION.SDK_INT > 25 && date != null) {
+
+                            DateTimeFormatter parseFormatter
+                                    = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+                            DateTimeFormatter newFormatter
+                                    = DateTimeFormatter.ofPattern("dd/MM/uuuu");
+                            String resultDate = LocalDateTime.parse(date, parseFormatter).format(newFormatter);
+
+                            if(gottenPost.getEmbedded().getCategoryAndTags().get(0).size() != 0) {
+                                StringBuilder xd = new StringBuilder();
+                                String finalCategories = "";
+                                for (int i = 0; i < gottenPost.getEmbedded().getCategoryAndTags().get(0).size(); i++) {
+                                    xd.append(gottenPost.getEmbedded().getCategoryAndTags().get(0).get(i).getCategoryName());
+                                    xd.append(", ");
+                                }
+                                finalCategories =  xd.toString().substring(0, xd.length() - 2);
+                                String author = gottenPost.getEmbedded().getAuthor().get(0).getName();
+
+                                String finalEverything = resultDate + "  /  " + author + "  /  " + finalCategories;
+                                dateAuthorCategories.setText(finalEverything);
+                            }
+
+
+                        }
+                        else{
+                           dateAuthorCategories.setText("We still work on low API's");
+                        }
+
+
+
+                        if(gottenPost.getEmbedded().getCategoryAndTags().get(1).size() != 0) {
+                            StringBuilder builder1 = new StringBuilder();
+                            String finalxdd = "";
+                            for (int i = 0; i < gottenPost.getEmbedded().getCategoryAndTags().get(1).size(); i++) {
+                                builder1.append(gottenPost.getEmbedded().getCategoryAndTags().get(1).get(i).getCategoryName());//written categoryname but it will take tags too
+                                builder1.append(", ");
+                            }
+                            finalxdd =  builder1.toString().substring(0, builder1.length() - 2);
+                            finalxdd = "Etiketler: " + finalxdd;
+                            tags.setText(finalxdd);
+                        } else{
+                            tags.setText("No tags");
+                        }
+
+
+
+
+                    }
+                }
+                else
+                    Toast.makeText(PostActivity.this, "Response was not successful...Please try later!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<BlogPost> call, Throwable t) {
+                progressDialog.dismiss();
+                Toast.makeText(PostActivity.this, "Something went wrong...Please try again by swiping down!", Toast.LENGTH_SHORT).show();
+            }
+        });
+        //getPostWithId(postId);
     }
 
+
+
+
+
     private void getPostWithId(String postId) {
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-        Call<List<BlogPost>> call = service.getPostContent(postId);
-
-
+        //Toast.makeText(getApplicationContext(), postId + " is postId", Toast.LENGTH_SHORT).show();
     }
 }

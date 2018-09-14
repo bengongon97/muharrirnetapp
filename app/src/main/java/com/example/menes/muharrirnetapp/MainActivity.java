@@ -7,6 +7,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import com.example.menes.muharrirnetapp.RetrofitRelated.GetDataService;
@@ -19,7 +21,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity  implements EntranceAdapter.OnItemClickListener {
 
     ProgressDialog progressDialog;
     List<BlogPost> rows = new ArrayList<>();
@@ -27,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView entrance;
     private EntranceAdapter entAdapter;
     SwipeRefreshLayout mySwipeRefresh;
-
 
 
     @Override
@@ -47,22 +48,20 @@ public class MainActivity extends AppCompatActivity {
                     public void onRefresh() {
                         // This method performs the actual data-refresh operation.
                         // The method calls setRefreshing(false) when it's finished.
-                       // call.clone().enqueue(MainActivity.this);
                         mySwipeRefresh.setRefreshing(false); //NOT YET IMPLEMENTED.
                     }
                 }
         );
-
-        callForGetAllPosts();
+        Integer pageNo = 1;
+        callForGetAllPosts(pageNo);
     }
 
-    private void callForGetAllPosts () {
+    private void callForGetAllPosts (Integer pageNo) {
 
         //todo: Read here xd
         // Only 10 posts because that's the page size. now we can do paging but we need to use scrollview
         // or handle by page numbers (new page for each page number) but I vote for scrollview.
 
-        Integer pageNo = 1;
         String page = pageNo.toString();
 
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
@@ -93,13 +92,14 @@ public class MainActivity extends AppCompatActivity {
         entrance = findViewById(R.id.mainRecyclerView);
         entAdapter = new EntranceAdapter(this,rowsForBlog);
         entrance.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-       // entAdapter.setOnItemClickListener((EntranceAdapter.OnItemClickListener) MainActivity.this);
+        entAdapter.setOnItemClickListener((EntranceAdapter.OnItemClickListener) MainActivity.this);
         entrance.setAdapter(entAdapter);
     }
 
     public void onItemClick(int position) {
+      //  Toast.makeText(getApplicationContext(), position + " is clicked", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, PostActivity.class);
-        intent.putExtra("id", rows.get(position).getPostId());
+        intent.putExtra("postId", rows.get(position).getPostId().toString());
         startActivity(intent);
     }
 

@@ -6,9 +6,12 @@ public class SizesInPicture {
 
     @SerializedName("thumbnail")
     private ThumbnailInPicture thumbnailInPicture;
+    @SerializedName("medium_large")
+    private MediumLarge mediumLarge;
 
-    public SizesInPicture(ThumbnailInPicture thumbnailInPicture){
+    public SizesInPicture(ThumbnailInPicture thumbnailInPicture, MediumLarge mediumLarge) {
         this.thumbnailInPicture = thumbnailInPicture;
+        this.mediumLarge = mediumLarge;
     }
 
     public ThumbnailInPicture getThumbnailInPicture() {
@@ -17,5 +20,13 @@ public class SizesInPicture {
 
     public void setThumbnailInPicture(ThumbnailInPicture thumbnailInPicture) {
         this.thumbnailInPicture = thumbnailInPicture;
+    }
+
+    public MediumLarge getMediumLarge() {
+        return mediumLarge;
+    }
+
+    public void setMediumLarge(MediumLarge mediumLarge) {
+        this.mediumLarge = mediumLarge;
     }
 }

@@ -1,4 +1,4 @@
-package com.example.menes.muharrirnetapp.PictureHandling;
+package com.example.menes.muharrirnetapp.PicAndPostHandling;
 
 import com.google.gson.annotations.SerializedName;
 

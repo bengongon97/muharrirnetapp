@@ -2,6 +2,7 @@ package com.example.menes.muharrirnetapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
@@ -64,26 +65,45 @@ public class PostActivity extends AppCompatActivity {
                 if (response.isSuccessful()){
                     gottenPost = response.body();
 
-                    Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
-                    builder.downloader(new OkHttp3Downloader(PostActivity.this));
-                    if(gottenPost.getEmbedded().getFeaturedMedia() != null) {
-                        builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumLarge().getSourceUrl())
-                                .placeholder((R.drawable.ic_launcher_background))
-                                .error(R.drawable.ic_launcher_background)
-                                .into(postFeaturedImage);
 
+                    if(gottenPost.getEmbedded() != null && gottenPost.getEmbedded().getFeaturedMedia() != null) {
 
-                        postTitle.setText(gottenPost.getTitle().getPostTitle());
-
-
+                        postTitle.setText(gottenPost.getTitle().getPostTitle()); //Title setting
 
                         String formattedExcerptinPost = Html.fromHtml(gottenPost.getContent().getPostContent()).toString();
-                        postContent.setText(formattedExcerptinPost);
+                        postContent.setText(formattedExcerptinPost); //Content setting
 
+                        if(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture() != null){ //Picture Setting
+                            Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
+                            builder.downloader(new OkHttp3Downloader(PostActivity.this));
+                            builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture().getSourceUrl())
+                                    .placeholder((R.drawable.muharrir_logo))
+                                    .error(R.drawable.muharrir_logo)
+                                    .into(postFeaturedImage);
+                        } else if(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumLarge() != null){
+                            Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
+                            builder.downloader(new OkHttp3Downloader(PostActivity.this));
+                            builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumLarge().getSourceUrl())
+                                    .placeholder((R.drawable.muharrir_logo))
+                                    .error(R.drawable.muharrir_logo)
+                                    .into(postFeaturedImage);
+                        } else if(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumPicture() != null){
+                            Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
+                            builder.downloader(new OkHttp3Downloader(PostActivity.this));
+                            builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumPicture().getSourceUrl())
+                                    .placeholder((R.drawable.muharrir_logo))
+                                    .error(R.drawable.muharrir_logo)
+                                    .into(postFeaturedImage);
+                        } else{
+                            Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
+                            builder.downloader(new OkHttp3Downloader(PostActivity.this));
+                            builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl())
+                                    .placeholder((R.drawable.muharrir_logo))
+                                    .error(R.drawable.muharrir_logo)
+                                    .into(postFeaturedImage);
+                        }
 
-
-
-                        String date = gottenPost.getDate();
+                        String date = gottenPost.getDate(); //Date, Author and Tag setting
                         if(Build.VERSION.SDK_INT > 25 && date != null) {
 
                             DateTimeFormatter parseFormatter
@@ -105,16 +125,13 @@ public class PostActivity extends AppCompatActivity {
                                 String finalEverything = resultDate + "  /  " + author + "  /  " + finalCategories;
                                 dateAuthorCategories.setText(finalEverything);
                             }
-
-
                         }
                         else{
                            dateAuthorCategories.setText("We still work on low API's");
                         }
 
 
-
-                        if(gottenPost.getEmbedded().getCategoryAndTags().get(1).size() != 0) {
+                        if(gottenPost.getEmbedded().getCategoryAndTags().get(1).size() != 0) { //Tag Setting
                             StringBuilder builder1 = new StringBuilder();
                             String finalxdd = "";
                             for (int i = 0; i < gottenPost.getEmbedded().getCategoryAndTags().get(1).size(); i++) {
@@ -127,11 +144,9 @@ public class PostActivity extends AppCompatActivity {
                         } else{
                             tags.setText("No tags");
                         }
-
-
-
-
                     }
+
+                    //Comment settings will come later.
                 }
                 else
                     Toast.makeText(PostActivity.this, "Response was not successful...Please try later!", Toast.LENGTH_SHORT).show();
@@ -143,14 +158,5 @@ public class PostActivity extends AppCompatActivity {
                 Toast.makeText(PostActivity.this, "Something went wrong...Please try again by swiping down!", Toast.LENGTH_SHORT).show();
             }
         });
-        //getPostWithId(postId);
-    }
-
-
-
-
-
-    private void getPostWithId(String postId) {
-        //Toast.makeText(getApplicationContext(), postId + " is postId", Toast.LENGTH_SHORT).show();
     }
 }

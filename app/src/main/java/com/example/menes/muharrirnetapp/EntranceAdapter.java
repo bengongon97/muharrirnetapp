@@ -133,8 +133,8 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
 
              if(row.getEmbedded().getFeaturedMedia() != null){
                  builder.build().load(row.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl())
-                        .placeholder((R.drawable.ic_launcher_background))
-                        .error(R.drawable.ic_launcher_background)
+                        .placeholder((R.drawable.muharrir_logo))
+                        .error(R.drawable.muharrir_logo)
                         .into(holder.postImg);
              }
              else{

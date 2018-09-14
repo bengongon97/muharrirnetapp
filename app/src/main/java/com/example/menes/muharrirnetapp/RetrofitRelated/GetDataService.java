@@ -1,7 +1,7 @@
 package com.example.menes.muharrirnetapp.RetrofitRelated;
 
 import com.example.menes.muharrirnetapp.BlogPost;
-import com.example.menes.muharrirnetapp.PictureHandling.FeaturedMedia;
+import com.example.menes.muharrirnetapp.PicAndPostHandling.FeaturedMedia;
 
 import java.util.List;
 

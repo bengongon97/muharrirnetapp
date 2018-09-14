@@ -106,10 +106,8 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(entAdapter);
         scaleInAnimationAdapter.setFirstOnly(false);
         scaleInAnimationAdapter.setDuration(500);
-        //scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
+        scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
         entrance.setAdapter(scaleInAnimationAdapter);
-
-
 
         entAdapter.setOnItemClickListener(MainActivity.this);
     }

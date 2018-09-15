@@ -5,6 +5,9 @@
     <color name="colorAccent">#FF4081</color>
 
     <color name="gray">#D3D3D3</color>
+    <color name="turquoise">#0EAEF0</color>
+    <color name="blue_muharrir">#226599</color>
+    <color name="white">#ffffff</color>
 
 
 </resources>

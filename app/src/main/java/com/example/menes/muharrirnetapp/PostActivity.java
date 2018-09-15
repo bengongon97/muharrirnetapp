@@ -2,21 +2,34 @@ package com.example.menes.muharrirnetapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.provider.Telephony;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
+import android.text.Spannable;
+import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.menes.muharrirnetapp.PicAndPostHandling.PicassoImageGetter;
 import com.example.menes.muharrirnetapp.RetrofitRelated.GetDataService;
 import com.example.menes.muharrirnetapp.RetrofitRelated.RetrofitClientInstance;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import org.json.JSONObject;
 import org.w3c.dom.Text;
@@ -29,6 +42,8 @@ import java.util.List;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static java.security.AccessController.getContext;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -69,8 +84,30 @@ public class PostActivity extends AppCompatActivity {
 
                         postTitle.setText(gottenPost.getTitle().getPostTitle()); //Title setting
 
-                        String formattedExcerptinPost = Html.fromHtml(gottenPost.getContent().getPostContent()).toString().trim();
-                        postContent.setText(formattedExcerptinPost); //Content setting
+
+                        /*Spanned formattedExcerptInPost = Html.fromHtml(gottenPost.getContent().getPostContent()); //Content setting
+                        postContent.setText(formattedExcerptInPost);
+                        postContent.setMovementMethod(LinkMovementMethod.getInstance()); //To activate links within.*/
+
+
+                        String content = gottenPost.getContent().getPostContent();
+
+
+
+                        Picasso.Builder maBuilder = new Picasso.Builder(PostActivity.this);
+                        Picasso pablo = maBuilder.build();
+                        PicassoImageGetter imageGetter = new PicassoImageGetter(postContent, getResources(), pablo);
+                        Spannable html;
+                        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                            html = (Spannable) Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY, imageGetter, null);
+                        } else {
+                            html = (Spannable) Html.fromHtml(content, imageGetter, null);
+                        }
+                        postContent.setText(html);
+                        postContent.setMovementMethod(LinkMovementMethod.getInstance());
+
+
+
 
                         if(gottenPost.getEmbedded().getFeaturedMedia() != null) {
                             if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture() != null) { //Picture Setting
@@ -80,6 +117,7 @@ public class PostActivity extends AppCompatActivity {
                                         .placeholder((R.drawable.muharrir_logo))
                                         .error(R.drawable.muharrir_logo)
                                         .into(postFeaturedImage);
+                                postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
                             } else if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumLarge() != null) {
                                 Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
                                 builder.downloader(new OkHttp3Downloader(PostActivity.this));
@@ -87,6 +125,7 @@ public class PostActivity extends AppCompatActivity {
                                         .placeholder((R.drawable.muharrir_logo))
                                         .error(R.drawable.muharrir_logo)
                                         .into(postFeaturedImage);
+                                postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
                             } else if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumPicture() != null) {
                                 Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
                                 builder.downloader(new OkHttp3Downloader(PostActivity.this));
@@ -94,6 +133,7 @@ public class PostActivity extends AppCompatActivity {
                                         .placeholder((R.drawable.muharrir_logo))
                                         .error(R.drawable.muharrir_logo)
                                         .into(postFeaturedImage);
+                                postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
                             } else {
                                 Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
                                 builder.downloader(new OkHttp3Downloader(PostActivity.this));
@@ -101,6 +141,7 @@ public class PostActivity extends AppCompatActivity {
                                         .placeholder((R.drawable.muharrir_logo))
                                         .error(R.drawable.muharrir_logo)
                                         .into(postFeaturedImage);
+                                postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
                             }
                         }
 

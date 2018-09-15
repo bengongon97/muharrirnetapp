@@ -9,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.Toast;
 
 import com.example.menes.muharrirnetapp.RetrofitRelated.GetDataService;
@@ -17,6 +18,10 @@ import com.example.menes.muharrirnetapp.RetrofitRelated.RetrofitClientInstance;
 import java.util.ArrayList;
 import java.util.List;
 
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
+import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -28,7 +33,6 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
 
     private RecyclerView entrance;
     private EntranceAdapter entAdapter;
-    SwipeRefreshLayout mySwipeRefresh;
 
 
     @Override
@@ -40,18 +44,6 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
         progressDialog.setMessage("Loading....");
         progressDialog.show();
 
-
-        mySwipeRefresh = findViewById(R.id.mySwipeRefresh);
-        mySwipeRefresh.setOnRefreshListener(
-                new SwipeRefreshLayout.OnRefreshListener() {
-                    @Override
-                    public void onRefresh() {
-                        // This method performs the actual data-refresh operation.
-                        // The method calls setRefreshing(false) when it's finished.
-                        mySwipeRefresh.setRefreshing(false); //NOT YET IMPLEMENTED.
-                    }
-                }
-        );
         Integer pageNo = 1;
         callForGetAllPosts(pageNo);
     }
@@ -90,10 +82,34 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
 
     private void generateDataList(List<BlogPost> rowsForBlog) {
         entrance = findViewById(R.id.mainRecyclerView);
-        entAdapter = new EntranceAdapter(this,rowsForBlog);
         entrance.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
-        entAdapter.setOnItemClickListener((EntranceAdapter.OnItemClickListener) MainActivity.this);
-        entrance.setAdapter(entAdapter);
+
+
+        entAdapter = new EntranceAdapter(this,rowsForBlog);
+
+        /*AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(entAdapter);
+        alphaAdapter.setFirstOnly(false);
+        alphaAdapter.setDuration(1500);
+        alphaAdapter.setInterpolator(new OvershootInterpolator());
+        entrance.setAdapter(new ScaleInAnimationAdapter(alphaAdapter));*/ //SO SO
+
+       /* SlideInRightAnimationAdapter slideInRightAnimationAdapter = new SlideInRightAnimationAdapter(entAdapter);
+        slideInRightAnimationAdapter.setFirstOnly(false);
+        slideInRightAnimationAdapter.setDuration(500);
+        entrance.setAdapter(slideInRightAnimationAdapter);*/ //BEST SO FAR
+
+        /*SlideInBottomAnimationAdapter slideInBottomAnimationAdapter = new SlideInBottomAnimationAdapter(entAdapter);
+        slideInBottomAnimationAdapter.setFirstOnly(false);
+        slideInBottomAnimationAdapter.setDuration(1000);
+        entrance.setAdapter(new ScaleInAnimationAdapter(slideInBottomAnimationAdapter));*/ //NOT SO GOOD.
+
+        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(entAdapter);
+        scaleInAnimationAdapter.setFirstOnly(false);
+        scaleInAnimationAdapter.setDuration(500);
+        scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
+        entrance.setAdapter(scaleInAnimationAdapter);
+
+        entAdapter.setOnItemClickListener(MainActivity.this);
     }
 
     public void onItemClick(int position) {

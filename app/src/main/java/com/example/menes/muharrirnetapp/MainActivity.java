@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
         setContentView(R.layout.activity_main);
 
         progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setMessage("Loading....");
+        progressDialog.setMessage("Yükleniyor...");
         progressDialog.show();
 
         Integer pageNo = 1;
@@ -87,21 +87,10 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
 
         entAdapter = new EntranceAdapter(this,rowsForBlog);
 
-        /*AlphaInAnimationAdapter alphaAdapter = new AlphaInAnimationAdapter(entAdapter);
-        alphaAdapter.setFirstOnly(false);
-        alphaAdapter.setDuration(1500);
-        alphaAdapter.setInterpolator(new OvershootInterpolator());
-        entrance.setAdapter(new ScaleInAnimationAdapter(alphaAdapter));*/ //SO SO
-
        /* SlideInRightAnimationAdapter slideInRightAnimationAdapter = new SlideInRightAnimationAdapter(entAdapter);
         slideInRightAnimationAdapter.setFirstOnly(false);
         slideInRightAnimationAdapter.setDuration(500);
         entrance.setAdapter(slideInRightAnimationAdapter);*/ //BEST SO FAR
-
-        /*SlideInBottomAnimationAdapter slideInBottomAnimationAdapter = new SlideInBottomAnimationAdapter(entAdapter);
-        slideInBottomAnimationAdapter.setFirstOnly(false);
-        slideInBottomAnimationAdapter.setDuration(1000);
-        entrance.setAdapter(new ScaleInAnimationAdapter(slideInBottomAnimationAdapter));*/ //NOT SO GOOD.
 
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(entAdapter);
         scaleInAnimationAdapter.setFirstOnly(false);
@@ -113,7 +102,6 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
     }
 
     public void onItemClick(int position) {
-      //  Toast.makeText(getApplicationContext(), position + " is clicked", Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(this, PostActivity.class);
         intent.putExtra("postId", rows.get(position).getPostId().toString());
         startActivity(intent);

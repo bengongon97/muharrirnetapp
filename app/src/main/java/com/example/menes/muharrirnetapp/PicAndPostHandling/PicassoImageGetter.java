@@ -1,15 +1,18 @@
 package com.example.menes.muharrirnetapp.PicAndPostHandling;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Point;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.text.Html;
 import android.util.DisplayMetrics;
 import android.view.Display;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +27,13 @@ public class PicassoImageGetter implements Html.ImageGetter {
 
     final TextView textView;
 
-    public PicassoImageGetter(final TextView textView, final Resources resources, final Picasso pablo) {
+    final Context context;
+
+    public PicassoImageGetter(final Context context, final TextView textView, final Resources resources, final Picasso pablo) {
         this.textView = textView;
         this.resources = resources;
         this.pablo = pablo;
+        this.context = context;
     }
 
     @SuppressLint("StaticFieldLeak")
@@ -51,16 +57,22 @@ public class PicassoImageGetter implements Html.ImageGetter {
                 try {
                     final BitmapDrawable drawable = new BitmapDrawable(resources, bitmap);
 
-
-                    /*float multiplier = (float)200 / (float)drawable.getIntrinsicWidth();
-                    int width = (int)(drawable.getIntrinsicWidth() * multiplier);
-                    int height = (int)(drawable.getIntrinsicHeight() * multiplier);*/
-
                     drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
 
                     result.setDrawable(drawable);
-                    result.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-                    //result.setBounds(0, 0, width, height);
+
+                    WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+                    try {
+                        Display display = wm.getDefaultDisplay();
+                        Point size = new Point();
+                        display.getSize(size);
+                        int width = size.x;
+                        //int height = size.y;
+
+                        result.setBounds(0, 0, width, drawable.getIntrinsicHeight());
+                    } catch (NullPointerException e) {
+                        result.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+                    }
 
                     textView.setText(textView.getText()); // invalidate() doesn't work correctly...
                 } catch (Exception e) {
@@ -73,6 +85,7 @@ public class PicassoImageGetter implements Html.ImageGetter {
         return result;
     }
 
+    @SuppressWarnings("Deprecation")
     static class BitmapDrawablePlaceHolder extends BitmapDrawable {
 
         protected Drawable drawable;

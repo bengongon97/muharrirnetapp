@@ -56,7 +56,7 @@ public class PostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post);
 
         progressDialog = new ProgressDialog(PostActivity.this);
-        progressDialog.setMessage("Loading....");
+        progressDialog.setMessage("Yükleniyor...");
         progressDialog.show();
 
         final ImageView postFeaturedImage = findViewById(R.id.postFeaturedImage);

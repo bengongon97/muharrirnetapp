@@ -31,6 +31,7 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.EntranceView>{
 
+
     public interface OnItemClickListener {
         void onItemClick (int position);
     }
@@ -48,7 +49,6 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
         this.onItemClickListener = onItemClickListener;
     }
 
-    //not sure if we need all of them OR why we need these.
     class EntranceView extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView authorText;
         TextView dateText;
@@ -155,6 +155,11 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
               }
           });
       }
+    }
+
+    public void appendNewRows(List<BlogPost> newRows, int pageno, int newItemCount) {
+        myPosts.addAll(newRows);
+        this.notifyItemRangeChanged(10*pageno ,newItemCount);
     }
 
     @Override

@@ -1,0 +1,19 @@
+https://medium.com/mindorks/dynamic-feature-modules-the-future-4bee124c0f1
+
+https://mindorks.com/android/store/Animations/airbnb/lottie-android
+
+https://blog.mindorks.com/run-parallel-tasks-in-java-or-android-and-get-callback-when-all-complete-video
+
+/**Not a link but might be useful
+
+editText.getBackground().mutate().setColorFilter(getResources().getColor(R.color.white), PorterDuff.Mode.SRC_ATOP);
+
+**//
+
+https://developer.android.com/studio/publish/
+
+http://findnerd.s3.amazonaws.com/imagedata/3152/3152.png
+
+https://jsonformatter.curiousconcept.com/
+
+https://mindorks.com/android/store/wasabeef/recyclerview-animators

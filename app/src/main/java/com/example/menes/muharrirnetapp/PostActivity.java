@@ -85,18 +85,10 @@ public class PostActivity extends AppCompatActivity {
                         postTitle.setText(gottenPost.getTitle().getPostTitle()); //Title setting
 
 
-                        /*Spanned formattedExcerptInPost = Html.fromHtml(gottenPost.getContent().getPostContent()); //Content setting
-                        postContent.setText(formattedExcerptInPost);
-                        postContent.setMovementMethod(LinkMovementMethod.getInstance()); //To activate links within.*/
-
-
-                        String content = gottenPost.getContent().getPostContent();
-
-
-
+                        String content = gottenPost.getContent().getPostContent(); //Content setting
                         Picasso.Builder maBuilder = new Picasso.Builder(PostActivity.this);
                         Picasso pablo = maBuilder.build();
-                        PicassoImageGetter imageGetter = new PicassoImageGetter(postContent, getResources(), pablo);
+                        PicassoImageGetter imageGetter = new PicassoImageGetter(PostActivity.this,postContent, getResources(), pablo);
                         Spannable html;
                         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                             html = (Spannable) Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY, imageGetter, null);
@@ -107,10 +99,8 @@ public class PostActivity extends AppCompatActivity {
                         postContent.setMovementMethod(LinkMovementMethod.getInstance());
 
 
-
-
-                        if(gottenPost.getEmbedded().getFeaturedMedia() != null) {
-                            if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture() != null) { //Picture Setting
+                        if(gottenPost.getEmbedded().getFeaturedMedia() != null) { //Picture Setting
+                            if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture() != null) {
                                 Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
                                 builder.downloader(new OkHttp3Downloader(PostActivity.this));
                                 builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture().getSourceUrl())

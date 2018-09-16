@@ -34,10 +34,14 @@ import com.squareup.picasso.Target;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -98,7 +102,6 @@ public class PostActivity extends AppCompatActivity {
                         postContent.setText(html);
                         postContent.setMovementMethod(LinkMovementMethod.getInstance());
 
-
                         if(gottenPost.getEmbedded().getFeaturedMedia() != null) { //Picture Setting
                             if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture() != null) {
                                 Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
@@ -136,6 +139,22 @@ public class PostActivity extends AppCompatActivity {
                         }
 
                         String date = gottenPost.getDate(); //Date, Author and Tag setting
+
+
+                        StringBuilder xd = new StringBuilder();
+                        String finalCategories = "";
+                        String author = "";
+                        String  finalEverything = "";
+
+                        if(gottenPost.getEmbedded().getCategoryAndTags().get(0).size() != 0) {
+
+                            for (int i = 0; i < gottenPost.getEmbedded().getCategoryAndTags().get(0).size(); i++) {
+                                xd.append(gottenPost.getEmbedded().getCategoryAndTags().get(0).get(i).getCategoryName());
+                                xd.append(", ");
+                            }
+                            finalCategories =  xd.toString().substring(0, xd.length() - 2);
+                            author = gottenPost.getEmbedded().getAuthor().get(0).getName();
+
                         if(Build.VERSION.SDK_INT > 25 && date != null) {
 
                             DateTimeFormatter parseFormatter
@@ -144,24 +163,25 @@ public class PostActivity extends AppCompatActivity {
                                     = DateTimeFormatter.ofPattern("dd/MM/uuuu");
                             String resultDate = LocalDateTime.parse(date, parseFormatter).format(newFormatter);
 
-                            if(gottenPost.getEmbedded().getCategoryAndTags().get(0).size() != 0) {
-                                StringBuilder xd = new StringBuilder();
-                                String finalCategories = "";
-                                for (int i = 0; i < gottenPost.getEmbedded().getCategoryAndTags().get(0).size(); i++) {
-                                    xd.append(gottenPost.getEmbedded().getCategoryAndTags().get(0).get(i).getCategoryName());
-                                    xd.append(", ");
-                                }
-                                finalCategories =  xd.toString().substring(0, xd.length() - 2);
-                                String author = gottenPost.getEmbedded().getAuthor().get(0).getName();
-
-                                String finalEverything = resultDate + "  /  " + author + "  /  " + finalCategories;
+                                finalEverything = resultDate + "  /  " + author + "  /  " + finalCategories;
                                 dateAuthorCategories.setText(finalEverything);
-                            }
-                        }
-                        else{
-                           dateAuthorCategories.setText("We still work on low API's");
-                        }
+                            } else if (Build.VERSION.SDK_INT <= 25 && date != null){
+                            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+                            SimpleDateFormat desiredFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
 
+                            Date dateForm = null;
+                            try {
+                                dateForm = formatter.parse(date);
+                            } catch (ParseException e) {
+                                e.printStackTrace();
+                                dateAuthorCategories.setText(date);
+                            }
+                            String dateString = desiredFormatter.format(dateForm);
+
+                                finalEverything = dateString + "  /  " + author + "  /  " + finalCategories;
+                                dateAuthorCategories.setText(finalEverything);
+                        }
+                    }
 
                         if(gottenPost.getEmbedded().getCategoryAndTags().get(1).size() != 0) { //Tag Setting
                             StringBuilder builder1 = new StringBuilder();
@@ -174,11 +194,11 @@ public class PostActivity extends AppCompatActivity {
                             finalxdd = "Etiketler: " + finalxdd;
                             tags.setText(finalxdd);
                         } else{
-                            tags.setText("No tags");
+                            tags.setText("Etiket bulunamadı.");
                         }
                     }
 
-                    //Comment settings will come later.
+                    //TODO:Comment settings will come later.
                 }
                 else
                     Toast.makeText(PostActivity.this, "Response was not successful...Please try later!", Toast.LENGTH_SHORT).show();

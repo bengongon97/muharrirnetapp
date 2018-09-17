@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.text.Html;
 
@@ -21,9 +22,12 @@ import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -89,7 +93,6 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
 
       final BlogPost row = myPosts.get(holder.getAdapterPosition());
 
-
       if(row.getStatus().equals("publish")) {
 
           holder.authorText.setText(row.getEmbedded().getAuthor().get(0).getName());
@@ -120,13 +123,22 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
 
               holder.dateText.setText(resultDate);
           }
-          else{
-              holder.dateText.setText(row.getDate());
+          else if (Build.VERSION.SDK_INT <= 25 && row.getDate() != null){
+              SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault());
+              SimpleDateFormat desiredFormatter = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
+
+              Date dateForm = null;
+              try {
+                  dateForm = formatter.parse(row.getDate());
+              } catch (ParseException e) {
+                  e.printStackTrace();
+                  holder.dateText.setText(row.getDate());
+              }
+              String dateString = desiredFormatter.format(dateForm);
+              holder.dateText.setText(dateString); //MIGHT BE INEFFICIENT! //Am I using too much strings?? TODO:Şevval take a look at dis' :D
           }
 
           if (row.getEmbedded() != null) {
-
-          //row.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl()
 
           Picasso.Builder builder = new Picasso.Builder(context);
           builder.downloader(new OkHttp3Downloader(context));
@@ -149,7 +161,6 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
               @Override
               public void onClick(View v) {
                   if(onItemClickListener != null) {
-                      //onItemClickListener.onItemClick(position); //
                       onItemClickListener.onItemClick(holder.getAdapterPosition());
                   }
               }

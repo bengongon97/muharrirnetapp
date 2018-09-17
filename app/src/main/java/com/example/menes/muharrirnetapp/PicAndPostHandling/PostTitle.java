@@ -18,9 +18,3 @@ public PostTitle(String postTitle){
         this.postTitle = postTitle;
     }
 }
-
-
-
-/*"title": {
-        "rendered": "ŞU TARAFA DOĞRU"
-        },*/

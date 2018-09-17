@@ -1,6 +1,9 @@
-package com.example.menes.muharrirnetapp;
+package com.example.menes.muharrirnetapp.PicAndPostHandling;
 
 import com.example.menes.muharrirnetapp.PicAndPostHandling.Embedded;
+import com.example.menes.muharrirnetapp.PicAndPostHandling.PostContent;
+import com.example.menes.muharrirnetapp.PicAndPostHandling.PostExcerpt;
+import com.example.menes.muharrirnetapp.PicAndPostHandling.PostTitle;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;

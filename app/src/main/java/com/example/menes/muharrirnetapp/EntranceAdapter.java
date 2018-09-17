@@ -1,37 +1,28 @@
 package com.example.menes.muharrirnetapp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.text.Html;
 
+import com.example.menes.muharrirnetapp.PicAndPostHandling.BlogPost;
 import com.squareup.picasso.OkHttp3Downloader;
 import com.squareup.picasso.Picasso;
 
 
-
-import org.w3c.dom.Text;
-
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
-
-import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.EntranceView>{
 
@@ -154,7 +145,6 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
                  holder.postImg.setMaxHeight(150);
                  holder.postImg.setMaxWidth(150);
              }
-
           }
 
           holder.itemView.setOnClickListener(new View.OnClickListener() {

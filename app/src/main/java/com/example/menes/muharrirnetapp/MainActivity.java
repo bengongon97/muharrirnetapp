@@ -2,31 +2,22 @@ package com.example.menes.muharrirnetapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
-import android.view.View;
 import android.view.animation.OvershootInterpolator;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.menes.muharrirnetapp.PicAndPostHandling.BlogPost;
 import com.example.menes.muharrirnetapp.RetrofitRelated.GetDataService;
 import com.example.menes.muharrirnetapp.RetrofitRelated.RetrofitClientInstance;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter;
 import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
-import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter;
-import jp.wasabeef.recyclerview.adapters.SlideInRightAnimationAdapter;
-import jp.wasabeef.recyclerview.animators.FadeInAnimator;
-import jp.wasabeef.recyclerview.animators.FadeInUpAnimator;
 import jp.wasabeef.recyclerview.animators.FlipInTopXAnimator;
 import retrofit2.Call;
 import retrofit2.Callback;

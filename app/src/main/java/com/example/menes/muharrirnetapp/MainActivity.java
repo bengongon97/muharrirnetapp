@@ -40,18 +40,12 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
     private RecyclerView entrance;
     private EntranceAdapter entAdapter;
 
-    ProgressBar progressBar;
-
-    ConstraintLayout mainLayout;
-
     int[] lastVisibleItem = new int[1];
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
 
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setMessage("Yükleniyor...");
@@ -70,7 +64,6 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy)
             {
-
                 if(dy > 0) //check for scroll down
                 {
                     StaggeredGridLayoutManager mLayoutManager = (StaggeredGridLayoutManager) recyclerView.getLayoutManager();
@@ -89,18 +82,7 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
 
     }
 
-    public void showProgressView() {
-        progressBar.setVisibility(View.VISIBLE);
-    }
-
-    public void hideProgressView() {
-        progressBar.setVisibility(View.INVISIBLE);
-    }
-
     private void getNextPage() {
-        mainLayout = findViewById(R.id.mainLayout);
-        progressBar = findViewById(R.id.progressBar);
-
         page++;
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         Call<List<BlogPost>> call = service.getAllPosts(page.toString());
@@ -109,13 +91,8 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
             @Override
             public void onResponse(Call<List<BlogPost>> call, Response<List<BlogPost>> response) {
                 if (response.isSuccessful()){
-
-                    showProgressView();
-
                     List<BlogPost> newRows = response.body();
                     entAdapter.appendNewRows(newRows, page, rows.size());
-
-                    hideProgressView();
                 }
                 else
                     Toast.makeText(MainActivity.this, "Başarılı bir cevap alamadık, lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();

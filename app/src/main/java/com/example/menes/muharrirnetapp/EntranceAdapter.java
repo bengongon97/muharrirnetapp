@@ -135,12 +135,10 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
                   holder.dateText.setText(row.getDate());
               }
               String dateString = desiredFormatter.format(dateForm);
-              holder.dateText.setText(dateString); //MIGHT BE INEFFICIENT!
+              holder.dateText.setText(dateString); //MIGHT BE INEFFICIENT! //Am I using too much strings?? TODO:Şevval take a look at dis' :D
           }
 
           if (row.getEmbedded() != null) {
-
-          //row.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl()
 
           Picasso.Builder builder = new Picasso.Builder(context);
           builder.downloader(new OkHttp3Downloader(context));
@@ -163,7 +161,6 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
               @Override
               public void onClick(View v) {
                   if(onItemClickListener != null) {
-                      //onItemClickListener.onItemClick(position); //
                       onItemClickListener.onItemClick(holder.getAdapterPosition());
                   }
               }
@@ -172,10 +169,8 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
     }
 
     public void appendNewRows(List<BlogPost> newRows, int pageno, int newItemCount) {
-
         myPosts.addAll(newRows);
         this.notifyItemRangeChanged(10*pageno ,newItemCount);
-
     }
 
     @Override

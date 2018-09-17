@@ -7,7 +7,9 @@ import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.menes.muharrirnetapp.PicAndPostHandling.BlogPost;
@@ -27,6 +29,7 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
 
     Integer page = 1;
     ProgressDialog progressDialog;
+    ProgressBar pBar;
     List<BlogPost> rows = new ArrayList<>();
     private RecyclerView entrance;
     private EntranceAdapter entAdapter;
@@ -37,6 +40,10 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Initially invisible progressbar
+        pBar = findViewById(R.id.postLoadBar);
+        pBar.setVisibility(View.INVISIBLE);
 
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setMessage("Yükleniyor...");
@@ -74,13 +81,16 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
     }
 
     private void getNextPage() {
+        pBar.setVisibility(View.VISIBLE);
         page++;
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         Call<List<BlogPost>> call = service.getAllPosts(page.toString());
 
         call.enqueue(new Callback<List<BlogPost>>() {
+
             @Override
             public void onResponse(Call<List<BlogPost>> call, Response<List<BlogPost>> response) {
+                pBar.setVisibility(View.INVISIBLE);
                 if (response.isSuccessful()){
                     List<BlogPost> newRows = response.body();
                     entAdapter.appendNewRows(newRows, page, rows.size());
@@ -91,6 +101,7 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
 
             @Override
             public void onFailure(Call<List<BlogPost>> call, Throwable t) {
+                pBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(MainActivity.this, "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
             }
         });
@@ -106,13 +117,16 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
         call.enqueue(new Callback<List<BlogPost>>() {
             @Override
             public void onResponse(Call<List<BlogPost>> call, Response<List<BlogPost>> response) {
-                progressDialog.dismiss();
+
                 if (response.isSuccessful()){
                     rows = response.body();
-                   generateDataList(rows);
+                    generateDataList(rows);
+                    progressDialog.dismiss();
                 }
-                else
+                else {
                     Toast.makeText(MainActivity.this, "Başarılı bir cevap alamadık, lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                }
             }
 
             @Override

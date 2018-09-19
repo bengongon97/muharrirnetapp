@@ -178,7 +178,6 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
     }
 
     private void callForGetAllPosts (Integer pageNo) {
-
         String page = pageNo.toString();
 
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);

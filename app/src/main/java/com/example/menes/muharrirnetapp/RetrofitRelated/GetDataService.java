@@ -16,7 +16,10 @@ public interface GetDataService {
     /*  ?page=n returns the nth page. By default it returns the first page content
      *  ?per_page=N returns N records per page.
      *  ?offset=x starts from the xth record and retrieves a page
+     *  /wp-json/wp/v2/posts?_embed&search=something --> all the posts with search term "something"
      */
+    @GET("posts?_embed")
+    Call<List<BlogPost>> getSearchResults(@Query("search") String query);
 
     @GET("posts?_embed")
     Call<List<BlogPost>> getAllPosts(@Query("page") String pageNo);

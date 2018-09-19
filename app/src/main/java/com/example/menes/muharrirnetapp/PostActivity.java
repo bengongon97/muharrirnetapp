@@ -82,39 +82,42 @@ public class PostActivity extends AppCompatActivity {
                         postContent.setText(html);
                         postContent.setMovementMethod(LinkMovementMethod.getInstance());
 
-                        if(gottenPost.getEmbedded().getFeaturedMedia() != null) { //Picture Setting
-                            if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture() != null) {
-                                Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
-                                builder.downloader(new OkHttp3Downloader(PostActivity.this));
-                                builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture().getSourceUrl())
-                                        .placeholder((R.drawable.muharrir_logo))
-                                        .error(R.drawable.muharrir_logo)
-                                        .into(postFeaturedImage);
-                                postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
-                            } else if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumLarge() != null) {
-                                Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
-                                builder.downloader(new OkHttp3Downloader(PostActivity.this));
-                                builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumLarge().getSourceUrl())
-                                        .placeholder((R.drawable.muharrir_logo))
-                                        .error(R.drawable.muharrir_logo)
-                                        .into(postFeaturedImage);
-                                postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
-                            } else if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumPicture() != null) {
-                                Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
-                                builder.downloader(new OkHttp3Downloader(PostActivity.this));
-                                builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumPicture().getSourceUrl())
-                                        .placeholder((R.drawable.muharrir_logo))
-                                        .error(R.drawable.muharrir_logo)
-                                        .into(postFeaturedImage);
-                                postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
-                            } else {
-                                Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
-                                builder.downloader(new OkHttp3Downloader(PostActivity.this));
-                                builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl())
-                                        .placeholder((R.drawable.muharrir_logo))
-                                        .error(R.drawable.muharrir_logo)
-                                        .into(postFeaturedImage);
-                                postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                        String code = gottenPost.getEmbedded().getFeaturedMedia().get(0).getStatus();
+                        if (code == null || !code.equals("rest_forbidden")) {
+                            if (gottenPost.getEmbedded().getFeaturedMedia() != null) { //Picture Setting
+                                if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture() != null) {
+                                    Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
+                                    builder.downloader(new OkHttp3Downloader(PostActivity.this));
+                                    builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture().getSourceUrl())
+                                            .placeholder((R.drawable.muharrir_logo))
+                                            .error(R.drawable.muharrir_logo)
+                                            .into(postFeaturedImage);
+                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                } else if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumLarge() != null) {
+                                    Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
+                                    builder.downloader(new OkHttp3Downloader(PostActivity.this));
+                                    builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumLarge().getSourceUrl())
+                                            .placeholder((R.drawable.muharrir_logo))
+                                            .error(R.drawable.muharrir_logo)
+                                            .into(postFeaturedImage);
+                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                } else if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumPicture() != null) {
+                                    Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
+                                    builder.downloader(new OkHttp3Downloader(PostActivity.this));
+                                    builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumPicture().getSourceUrl())
+                                            .placeholder((R.drawable.muharrir_logo))
+                                            .error(R.drawable.muharrir_logo)
+                                            .into(postFeaturedImage);
+                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                } else {
+                                    Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
+                                    builder.downloader(new OkHttp3Downloader(PostActivity.this));
+                                    builder.build().load(gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl())
+                                            .placeholder((R.drawable.muharrir_logo))
+                                            .error(R.drawable.muharrir_logo)
+                                            .into(postFeaturedImage);
+                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                }
                             }
                         }
 

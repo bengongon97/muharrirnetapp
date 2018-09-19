@@ -135,10 +135,19 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
           builder.downloader(new OkHttp3Downloader(context));
 
              if(row.getEmbedded().getFeaturedMedia() != null){
-                 builder.build().load(row.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl())
-                        .placeholder((R.drawable.muharrir_logo))
-                        .error(R.drawable.muharrir_logo)
-                        .into(holder.postImg);
+                 String code = row.getEmbedded().getFeaturedMedia().get(0).getStatus();
+                 if (code != null && code.equals("rest_forbidden"))
+                 {
+                     holder.postImg.setImageResource(R.drawable.muharrir_logo);
+                     holder.postImg.setMaxHeight(150);
+                     holder.postImg.setMaxWidth(150);
+                 }
+                 else {
+                     builder.build().load(row.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getThumbnailInPicture().getSourceUrl())
+                             .placeholder((R.drawable.muharrir_logo))
+                             .error(R.drawable.muharrir_logo)
+                             .into(holder.postImg);
+                 }
              }
              else{
                  holder.postImg.setImageResource(R.drawable.muharrir_logo);
@@ -161,6 +170,11 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
     public void appendNewRows(List<BlogPost> newRows, int pageno, int newItemCount) {
         myPosts.addAll(newRows);
         this.notifyItemRangeChanged(10*pageno ,newItemCount);
+    }
+
+    public void showSearchResults(List<BlogPost> newRows) {
+        myPosts = newRows;
+        this.notifyDataSetChanged();
     }
 
     @Override

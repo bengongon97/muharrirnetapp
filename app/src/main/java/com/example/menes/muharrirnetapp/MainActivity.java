@@ -2,12 +2,17 @@ package com.example.menes.muharrirnetapp;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.media.Image;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
+import android.view.View;
 import android.view.animation.OvershootInterpolator;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import com.example.menes.muharrirnetapp.PicAndPostHandling.BlogPost;
@@ -26,7 +31,9 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity  implements EntranceAdapter.OnItemClickListener {
 
     Integer page = 1;
+    SearchView searchbar;
     ProgressDialog progressDialog;
+    ProgressBar pBar;
     List<BlogPost> rows = new ArrayList<>();
     private RecyclerView entrance;
     private EntranceAdapter entAdapter;
@@ -37,6 +44,14 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        searchbar = findViewById(R.id.search_bar);
+        final ImageView book = findViewById(R.id.bookLogo);
+        final ImageView appname = findViewById(R.id.muharrirLogo);
+
+        //Initially invisible progressbar
+        pBar = findViewById(R.id.postLoadBar);
+        pBar.setVisibility(View.INVISIBLE);
 
         progressDialog = new ProgressDialog(MainActivity.this);
         progressDialog.setMessage("Yükleniyor...");
@@ -52,6 +67,7 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
         {
+
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy)
             {
@@ -70,17 +86,81 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
             }
         });
 
+        searchbar.setOnSearchClickListener( new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                book.setVisibility(View.INVISIBLE);
+                appname.setVisibility(View.INVISIBLE);
+                searchbar.setPadding(1,1,1,1);
+            }
+        });
+
+        searchbar.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+                book.setVisibility(View.VISIBLE);
+                appname.setVisibility(View.VISIBLE);
+                generateDataList(rows); //resets the search results, in a way.
+                return false;
+            }
+        });
+        searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                pBar.setVisibility(View.VISIBLE);
+                getQueryPosts(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
+    }
+
+    //TODO: Search results don't have a paging mechanism. IDK what happens if we have 15 results or something.
+
+    private void getQueryPosts(String query) {
+
+        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
+        Call<List<BlogPost>> call = service.getSearchResults(query);
+
+        call.enqueue(new Callback<List<BlogPost>>() {
+            @Override
+            public void onResponse(Call<List<BlogPost>> call, Response<List<BlogPost>> response) {
+                if (response.isSuccessful()){
+                    List<BlogPost> newRows = response.body();
+                    entAdapter.showSearchResults(newRows);
+                }
+                else
+                    Toast.makeText(MainActivity.this, "Başarılı bir cevap alamadık, lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
+
+                pBar.setVisibility(View.INVISIBLE);
+            }
+
+            @Override
+            public void onFailure(Call<List<BlogPost>> call, Throwable t) {
+                pBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(MainActivity.this, "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
+            }
+        });
+
 
     }
 
     private void getNextPage() {
+        pBar.setVisibility(View.VISIBLE);
         page++;
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
         Call<List<BlogPost>> call = service.getAllPosts(page.toString());
 
         call.enqueue(new Callback<List<BlogPost>>() {
+
             @Override
             public void onResponse(Call<List<BlogPost>> call, Response<List<BlogPost>> response) {
+                pBar.setVisibility(View.INVISIBLE);
                 if (response.isSuccessful()){
                     List<BlogPost> newRows = response.body();
                     entAdapter.appendNewRows(newRows, page, rows.size());
@@ -91,13 +171,13 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
 
             @Override
             public void onFailure(Call<List<BlogPost>> call, Throwable t) {
+                pBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(MainActivity.this, "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void callForGetAllPosts (Integer pageNo) {
-
         String page = pageNo.toString();
 
         GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
@@ -106,13 +186,16 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
         call.enqueue(new Callback<List<BlogPost>>() {
             @Override
             public void onResponse(Call<List<BlogPost>> call, Response<List<BlogPost>> response) {
-                progressDialog.dismiss();
+
                 if (response.isSuccessful()){
                     rows = response.body();
-                   generateDataList(rows);
+                    generateDataList(rows);
+                    progressDialog.dismiss();
                 }
-                else
+                else {
                     Toast.makeText(MainActivity.this, "Başarılı bir cevap alamadık, lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
+                    progressDialog.dismiss();
+                }
             }
 
             @Override
@@ -137,7 +220,6 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
 
         entAdapter.setOnItemClickListener(MainActivity.this);
     }
-
 
     public void onItemClick(int position) {
         Intent intent = new Intent(this, PostActivity.class);

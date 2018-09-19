@@ -163,6 +163,11 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
         this.notifyItemRangeChanged(10*pageno ,newItemCount);
     }
 
+    public void showSearchResults(List<BlogPost> newRows) {
+        myPosts = newRows;
+        this.notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
         return myPosts.size();

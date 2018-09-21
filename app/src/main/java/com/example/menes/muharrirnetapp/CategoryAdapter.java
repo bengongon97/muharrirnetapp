@@ -27,7 +27,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryAdapter.CategoryView>{
         void onItemClick (int position);
     }
 
-
+    /*
 
     @NonNull
     @Override
@@ -48,6 +48,7 @@ public class CategoryAdapter extends ArrayAdapter<CategoryAdapter.CategoryView>{
     public int getItemCount() {
         return categories.size();
     }
+    */
 
     public class CategoryView extends RecyclerView.ViewHolder {
 

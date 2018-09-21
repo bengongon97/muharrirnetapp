@@ -21,6 +21,10 @@
         <activity android:name=".PostActivity">
 
         </activity>
+
+        <activity android:name=".MenuActivity">
+
+        </activity>
     </application>
 
 </manifest>

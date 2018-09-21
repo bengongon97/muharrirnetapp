@@ -3,6 +3,7 @@ package com.example.menes.muharrirnetapp;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.Image;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +35,8 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
     SearchView searchbar;
     ProgressDialog progressDialog;
     ProgressBar pBar;
+    FloatingActionButton menuBtn;
+
     List<BlogPost> rows = new ArrayList<>();
     private RecyclerView entrance;
     private EntranceAdapter entAdapter;
@@ -45,6 +48,7 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        menuBtn = findViewById(R.id.category_button);
         searchbar = findViewById(R.id.search_bar);
         final ImageView book = findViewById(R.id.bookLogo);
         final ImageView appname = findViewById(R.id.muharrirLogo);
@@ -67,7 +71,6 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
         {
-
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy)
             {
@@ -83,6 +86,14 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
                     }
 
                 }
+            }
+        });
+
+        menuBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                startActivity(intent);
             }
         });
 

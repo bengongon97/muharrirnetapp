@@ -105,9 +105,9 @@
         app:layout_constraintStart_toStartOf="@+id/mainRecyclerView" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/floatingActionButton"
-        android:layout_width="47dp"
-        android:layout_height="46dp"
+        android:id="@+id/category_button"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:layout_marginBottom="16dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"

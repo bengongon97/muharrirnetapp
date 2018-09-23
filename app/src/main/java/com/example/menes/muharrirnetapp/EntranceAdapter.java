@@ -170,7 +170,7 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
 
     public void appendNewRows(List<BlogPost> newRows, int pageno, int newItemCount) {
         myPosts.addAll(newRows);
-        this.notifyItemRangeChanged(10*pageno ,newItemCount);
+        this.notifyItemRangeInserted(10*pageno ,newItemCount);
     }
 
     public void clearRows()

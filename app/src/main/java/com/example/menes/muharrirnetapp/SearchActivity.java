@@ -121,11 +121,13 @@ public class SearchActivity extends AppCompatActivity implements EntranceAdapter
 
         entAdapter = new EntranceAdapter(this,rowsForBlog);
 
-        ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(entAdapter);
+        /*ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(entAdapter);
         scaleInAnimationAdapter.setFirstOnly(false);
         scaleInAnimationAdapter.setDuration(500);
         scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
-        entrance.setAdapter(scaleInAnimationAdapter);
+        entrance.setAdapter(scaleInAnimationAdapter);*/
+
+        entrance.setAdapter(entAdapter);
 
         entAdapter.setOnItemClickListener(SearchActivity.this);
     }

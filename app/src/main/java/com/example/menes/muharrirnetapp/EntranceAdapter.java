@@ -20,6 +20,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -172,11 +173,11 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
         this.notifyItemRangeChanged(10*pageno ,newItemCount);
     }
 
-    public void showSearchResults(List<BlogPost> newRows) {
-        myPosts = newRows;
+    public void clearRows()
+    {
+        myPosts = new ArrayList<>();
         this.notifyDataSetChanged();
     }
-
     @Override
     public int getItemCount() {
         return myPosts.size();

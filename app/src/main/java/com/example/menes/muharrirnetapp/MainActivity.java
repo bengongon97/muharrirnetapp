@@ -3,6 +3,7 @@ package com.example.menes.muharrirnetapp;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.media.Image;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -31,9 +32,11 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity  implements EntranceAdapter.OnItemClickListener {
 
     Integer page = 1;
-    SearchView searchbar;
     ProgressDialog progressDialog;
     ProgressBar pBar;
+    FloatingActionButton menuBtn;
+    ImageView searchBtn;
+
     List<BlogPost> rows = new ArrayList<>();
     private RecyclerView entrance;
     private EntranceAdapter entAdapter;
@@ -45,7 +48,9 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        searchbar = findViewById(R.id.search_bar);
+        searchBtn= findViewById(R.id.searchBtn);
+        menuBtn = findViewById(R.id.menu_button);
+
         final ImageView book = findViewById(R.id.bookLogo);
         final ImageView appname = findViewById(R.id.muharrirLogo);
 
@@ -54,7 +59,7 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
         pBar.setVisibility(View.INVISIBLE);
 
         progressDialog = new ProgressDialog(MainActivity.this);
-        progressDialog.setMessage("Yükleniyor...");
+        progressDialog.setMessage(getString(R.string.loading_msg));
         progressDialog.show();
 
         final Integer pageNo = 1;
@@ -67,7 +72,6 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener()
         {
-
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy)
             {
@@ -86,67 +90,21 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
             }
         });
 
-        searchbar.setOnSearchClickListener( new View.OnClickListener(){
+        menuBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                book.setVisibility(View.INVISIBLE);
-                appname.setVisibility(View.INVISIBLE);
-                searchbar.setPadding(1,1,1,1);
+                Intent intent = new Intent(MainActivity.this, MenuActivity.class);
+                startActivity(intent);
             }
         });
 
-        searchbar.setOnCloseListener(new SearchView.OnCloseListener() {
+        searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onClose() {
-                book.setVisibility(View.VISIBLE);
-                appname.setVisibility(View.VISIBLE);
-                generateDataList(rows); //resets the search results, in a way.
-                return false;
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SearchActivity.class);
+                startActivity(intent);
             }
         });
-        searchbar.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                pBar.setVisibility(View.VISIBLE);
-                getQueryPosts(query);
-                return true;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
-        });
-
-    }
-
-    //TODO: Search results don't have a paging mechanism. IDK what happens if we have 15 results or something.
-
-    private void getQueryPosts(String query) {
-
-        GetDataService service = RetrofitClientInstance.getRetrofitInstance().create(GetDataService.class);
-        Call<List<BlogPost>> call = service.getSearchResults(query);
-
-        call.enqueue(new Callback<List<BlogPost>>() {
-            @Override
-            public void onResponse(Call<List<BlogPost>> call, Response<List<BlogPost>> response) {
-                if (response.isSuccessful()){
-                    List<BlogPost> newRows = response.body();
-                    entAdapter.showSearchResults(newRows);
-                }
-                else
-                    Toast.makeText(MainActivity.this, "Başarılı bir cevap alamadık, lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
-
-                pBar.setVisibility(View.INVISIBLE);
-            }
-
-            @Override
-            public void onFailure(Call<List<BlogPost>> call, Throwable t) {
-                pBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(MainActivity.this, "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
-            }
-        });
-
 
     }
 
@@ -193,7 +151,7 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
                     progressDialog.dismiss();
                 }
                 else {
-                    Toast.makeText(MainActivity.this, "Başarılı bir cevap alamadık, lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, getString(R.string.err_resp), Toast.LENGTH_SHORT ).show();
                     progressDialog.dismiss();
                 }
             }
@@ -201,7 +159,7 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
             @Override
             public void onFailure(Call<List<BlogPost>> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(MainActivity.this, "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, getString(R.string.err_fail), Toast.LENGTH_SHORT).show();
             }
         });
     }

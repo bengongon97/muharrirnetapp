@@ -15,7 +15,6 @@ public class MenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_menu);
 
         GridView gridview = (GridView) findViewById(R.id.menu_grid);
-        gridview.setAdapter((ListAdapter) new CategoryAdapter(this));
 
         gridview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View v,

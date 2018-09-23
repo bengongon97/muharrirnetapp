@@ -92,7 +92,7 @@ public class PostActivity extends AppCompatActivity {
                                             .placeholder((R.drawable.muharrir_logo))
                                             .error(R.drawable.muharrir_logo)
                                             .into(postFeaturedImage);
-                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                                 } else if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumLarge() != null) {
                                     Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
                                     builder.downloader(new OkHttp3Downloader(PostActivity.this));
@@ -100,7 +100,7 @@ public class PostActivity extends AppCompatActivity {
                                             .placeholder((R.drawable.muharrir_logo))
                                             .error(R.drawable.muharrir_logo)
                                             .into(postFeaturedImage);
-                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                                 } else if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getMediumPicture() != null) {
                                     Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
                                     builder.downloader(new OkHttp3Downloader(PostActivity.this));
@@ -108,7 +108,7 @@ public class PostActivity extends AppCompatActivity {
                                             .placeholder((R.drawable.muharrir_logo))
                                             .error(R.drawable.muharrir_logo)
                                             .into(postFeaturedImage);
-                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                                 } else {
                                     Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
                                     builder.downloader(new OkHttp3Downloader(PostActivity.this));
@@ -116,7 +116,7 @@ public class PostActivity extends AppCompatActivity {
                                             .placeholder((R.drawable.muharrir_logo))
                                             .error(R.drawable.muharrir_logo)
                                             .into(postFeaturedImage);
-                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_XY);
+                                    postFeaturedImage.setScaleType(ImageView.ScaleType.FIT_CENTER);
                                 }
                             }
                         }

@@ -89,9 +89,10 @@ public class PostActivity extends AppCompatActivity {
                         postContent.setText(html);
                         postContent.setMovementMethod(LinkMovementMethod.getInstance());
 
+                        if (gottenPost.getEmbedded().getFeaturedMedia() != null) {
                         String code = gottenPost.getEmbedded().getFeaturedMedia().get(0).getStatus();
                         if (code == null || !code.equals("rest_forbidden")) {
-                            if (gottenPost.getEmbedded().getFeaturedMedia() != null) { //Picture Setting
+                            //Picture Setting
                                 if (gottenPost.getEmbedded().getFeaturedMedia().get(0).getMediaDetails().getSizesInPicture().getLargePicture() != null) {
                                     Picasso.Builder builder = new Picasso.Builder(PostActivity.this);
                                     builder.downloader(new OkHttp3Downloader(PostActivity.this));
@@ -146,7 +147,6 @@ public class PostActivity extends AppCompatActivity {
                             author = gottenPost.getEmbedded().getAuthor().get(0).getName();
 
                         if(Build.VERSION.SDK_INT > 25 && date != null) {
-
                             DateTimeFormatter parseFormatter
                                     = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
                             DateTimeFormatter newFormatter
@@ -193,7 +193,7 @@ public class PostActivity extends AppCompatActivity {
                     RecyclerView commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
                     commentsRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
 
-                    CommentAdapter commentAdapter = new CommentAdapter(PostActivity.this,gottenPost.getEmbedded().getComments().get(0),gottenPost);
+                    CommentAdapter commentAdapter = new CommentAdapter(PostActivity.this,gottenPost.getEmbedded().getComments(),gottenPost);
 
                     ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(commentAdapter);
                     scaleInAnimationAdapter.setFirstOnly(false);

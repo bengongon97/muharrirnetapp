@@ -32,22 +32,31 @@ public class BlogPost {
     private String status;
     @SerializedName("_embedded")
     private Embedded embedded;
+    @SerializedName("comment_status")
+    private String commentStatus;
 
 
-    // Kept this minimal. Can (WILL*) be extended.
-    public BlogPost(Embedded embedded, String status, Integer postPictureId, Integer postId, String date, PostTitle title, PostContent content, List<String> tags, String author, List<String> categories, PostExcerpt excerpt)
-    {
-        this.embedded = embedded;
+    public BlogPost(Integer postId, PostTitle title, List<String> tags, PostContent content, String author, List<String> categories, PostExcerpt excerpt, String date, Integer postPictureId, String status, Embedded embedded, String commentStatus) {
         this.postId = postId;
-        this.date = date;
         this.title = title;
-        this.content = content;
         this.tags = tags;
+        this.content = content;
         this.author = author;
         this.categories = categories;
         this.excerpt = excerpt;
+        this.date = date;
         this.postPictureId = postPictureId;
         this.status = status;
+        this.embedded = embedded;
+        this.commentStatus = commentStatus;
+    }
+
+    public String getCommentStatus() {
+        return commentStatus;
+    }
+
+    public void setCommentStatus(String commentStatus) {
+        this.commentStatus = commentStatus;
     }
 
     public Embedded getEmbedded() {

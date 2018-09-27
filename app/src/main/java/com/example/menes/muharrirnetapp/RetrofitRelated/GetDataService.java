@@ -27,6 +27,6 @@ public interface GetDataService {
     @GET("posts/{id}?_embed")
     Call<BlogPost> getPostContent(@Path("id") String postId);
 
-    @GET("media/{pic}")
-    Call<FeaturedMedia> getPictureContent(@Path("pic") Integer pictureId);
+    /*@GET("media/{pic}")
+    Call<FeaturedMedia> getPictureContent(@Path("pic") Integer pictureId);*/
 }

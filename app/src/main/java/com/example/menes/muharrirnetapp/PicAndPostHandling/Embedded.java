@@ -12,6 +12,23 @@ public class Embedded {
     private List<Author> author;
     @SerializedName("wp:term")
     private List<List<CategoriesAndTags>> categoryAndTags;
+    @SerializedName("replies")
+    private List<List<Comments>> comments;
+
+    public List<List<Comments>> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<List<Comments>> comments) {
+        this.comments = comments;
+    }
+
+    public Embedded(List<FeaturedMedia> featuredMedia, List<Author> author, List<List<CategoriesAndTags>> categoryAndTags, List<List<Comments>> comments) {
+        this.featuredMedia = featuredMedia;
+        this.author = author;
+        this.categoryAndTags = categoryAndTags;
+        this.comments = comments;
+    }
 
     public List<Author> getAuthor() {
         return author;

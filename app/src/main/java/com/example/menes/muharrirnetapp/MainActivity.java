@@ -124,13 +124,13 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
                     entAdapter.appendNewRows(newRows, page, rows.size());
                 }
                 else
-                    Toast.makeText(MainActivity.this, "Başarılı bir cevap alamadık, lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.err_resp, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<List<BlogPost>> call, Throwable t) {
                 pBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(MainActivity.this, "Bir şeyler yanlış gitti. Lütfen tekrar deneyin.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity.this, R.string.err_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }

@@ -4,9 +4,13 @@ import android.app.ProgressDialog;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.text.Html;
 import android.text.Spannable;
 import android.text.method.LinkMovementMethod;
+import android.view.View;
+import android.view.animation.OvershootInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.Locale;
 
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -48,7 +53,9 @@ public class PostActivity extends AppCompatActivity {
         final TextView dateAuthorCategories = findViewById(R.id.dateAuthorCategories);
         final TextView postContent = findViewById(R.id.postContent);
         final TextView tags = findViewById(R.id.tags);
-        TextView commentsAndSoOn = findViewById(R.id.comments);
+        final TextView commentAuthorNameText = findViewById(R.id.commentAuthorNameText);
+        final TextView commentDateText = findViewById(R.id.commentDateText);
+        final TextView commentContentText = findViewById(R.id.commentContentText);
 
 
         String postId= getIntent().getStringExtra("postId");
@@ -181,16 +188,28 @@ public class PostActivity extends AppCompatActivity {
                         }
                     }
 
-                    //TODO:Comment settings will come later.
+                    //Comments will be handled in adapter
+
+                    RecyclerView commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
+                    commentsRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+
+                    CommentAdapter commentAdapter = new CommentAdapter(PostActivity.this,gottenPost.getEmbedded().getComments().get(0),gottenPost);
+
+                    ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(commentAdapter);
+                    scaleInAnimationAdapter.setFirstOnly(false);
+                    scaleInAnimationAdapter.setDuration(500);
+                    scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
+                    commentsRecyclerView.setAdapter(scaleInAnimationAdapter);
+
                 }
                 else
-                    Toast.makeText(PostActivity.this, "Response was not successful...Please try later!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PostActivity.this, R.string.err_resp, Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onFailure(Call<BlogPost> call, Throwable t) {
                 progressDialog.dismiss();
-                Toast.makeText(PostActivity.this, "Something went wrong...Please try again by swiping down!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PostActivity.this, R.string.err_fail, Toast.LENGTH_SHORT).show();
             }
         });
     }

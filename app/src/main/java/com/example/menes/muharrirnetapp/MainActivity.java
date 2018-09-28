@@ -51,9 +51,6 @@ public class MainActivity extends AppCompatActivity  implements EntranceAdapter.
         searchBtn= findViewById(R.id.searchBtn);
         menuBtn = findViewById(R.id.menu_button);
 
-        final ImageView book = findViewById(R.id.bookLogo);
-        final ImageView appname = findViewById(R.id.muharrirLogo);
-
         //Initially invisible progressbar
         pBar = findViewById(R.id.postLoadBar);
         pBar.setVisibility(View.INVISIBLE);

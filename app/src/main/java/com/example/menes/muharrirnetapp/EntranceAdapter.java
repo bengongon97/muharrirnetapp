@@ -27,7 +27,6 @@ import java.util.Locale;
 
 public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.EntranceView>{
 
-
     public interface OnItemClickListener {
         void onItemClick (int position);
     }
@@ -173,11 +172,6 @@ public class EntranceAdapter extends RecyclerView.Adapter<EntranceAdapter.Entran
         this.notifyItemRangeInserted(10*pageno ,newItemCount);
     }
 
-    public void clearRows()
-    {
-        myPosts = new ArrayList<>();
-        this.notifyDataSetChanged();
-    }
     @Override
     public int getItemCount() {
         return myPosts.size();

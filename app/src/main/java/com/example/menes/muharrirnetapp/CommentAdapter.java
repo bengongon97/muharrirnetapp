@@ -73,15 +73,10 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                 String content = "";
                 Spannable html = null;
 
-                for (int y = 0; y < gottenPost.getEmbedded().getComments().size(); y++) {
+                commentAuthor = "<b>" + gottenPost.getEmbedded().getComments().get(0).get(position).getAuthor_name() + "</b> " + " dedi ki:";//Author setting
 
-
-                    commentAuthor = "<b>" + gottenPost.getEmbedded().getComments().get(0).get(y).getAuthor_name() + "</b> " + " dedi ki:";//Author setting
-
-
-
-                    date = gottenPost.getEmbedded().getComments().get(0).get(y).getDate(); //Date conversion and setting
-                    if(Build.VERSION.SDK_INT > 25 && date != null) {
+                date = gottenPost.getEmbedded().getComments().get(0).get(position).getDate(); //Date conversion and setting
+                if(Build.VERSION.SDK_INT > 25 && date != null) {
                         DateTimeFormatter parseFormatter
                                 = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
                         DateTimeFormatter newFormatter
@@ -104,7 +99,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     }
 
 
-                    content = gottenPost.getEmbedded().getComments().get(0).get(y).getContent().getCommentContent(); //Content setting
+                    content = gottenPost.getEmbedded().getComments().get(0).get(position).getContent().getCommentContent(); //Content setting
 
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                         html = (Spannable) Html.fromHtml(content, Html.FROM_HTML_MODE_LEGACY, null, null);
@@ -117,7 +112,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     holder.commentDateText.setText(resultDate);
                     holder.commentContentText.setText(html);
                     holder.commentContentText.setMovementMethod(LinkMovementMethod.getInstance());
-                }
+
 
 
             }else {

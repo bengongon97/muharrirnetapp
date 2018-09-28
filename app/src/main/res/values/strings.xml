@@ -3,4 +3,12 @@
     <string name="err_resp">"Başarılı bir cevap alamadık, lütfen tekrar deneyin."</string>
     <string name="err_fail">"Bir şeyler yanlış gitti. Lütfen tekrar deneyin."</string>
     <string name="loading_msg">"Yükleniyor..."</string>
+    <string-array name="categories">
+        <item>Lisan</item>
+        <item>Maarif</item>
+        <item>İktisat</item>
+        <item>İçtimai</item>
+        <item>Teknoloji</item>
+        <item>Hakkımızda</item>
+    </string-array>
 </resources>

@@ -3,6 +3,7 @@ package com.example.menes.muharrirnetapp;
 import android.content.Context;
 import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.text.Spannable;
@@ -29,21 +30,25 @@ import java.util.Locale;
 public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentView>{
 
     BlogPost gottenPost;
+    int mExpandedPosition = -1;
 
     private EntranceAdapter.OnItemClickListener onItemClickListener;
     private List<List<Comments>> justForLength;
     private Context context;
+    private RecyclerView.LayoutManager myManager;
 
-    public CommentAdapter(Context context, List<List<Comments>> justForLength, BlogPost blogPost) {
+    public CommentAdapter(Context context, List<List<Comments>> justForLength, BlogPost blogPost, RecyclerView.LayoutManager myManager) {
         this.context = context;
         this.justForLength = justForLength;
         this.gottenPost = blogPost;
+        this.myManager = myManager;
     }
 
     class CommentView extends RecyclerView.ViewHolder {
         TextView commentDateText;
         TextView commentContentText;
         TextView commentAuthorNameText;
+        TextView commentsTitle;
 
         private CommentView(View itemView) {
             super(itemView);
@@ -51,6 +56,7 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
             commentDateText = itemView.findViewById(R.id.commentDateText);
             commentAuthorNameText = itemView.findViewById(R.id.commentAuthorNameText);
             commentContentText = itemView.findViewById(R.id.commentContentText);
+            commentsTitle = itemView.findViewById(R.id.commentsTitle);
         }
 
     }
@@ -108,11 +114,32 @@ public class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentV
                     }
 
 
+
+
                     holder.commentAuthorNameText.setText(Html.fromHtml(commentAuthor));
                     holder.commentDateText.setText(resultDate);
                     holder.commentContentText.setText(html);
                     holder.commentContentText.setMovementMethod(LinkMovementMethod.getInstance());
 
+                final boolean isExpanded = position==mExpandedPosition;
+                holder.commentContentText.setVisibility(isExpanded?View.VISIBLE:View.GONE);
+                holder.itemView.setActivated(isExpanded);
+                holder.itemView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mExpandedPosition = isExpanded ? -1:position;
+                        notifyItemChanged(position);
+
+                        myManager.scrollToPosition(mExpandedPosition);
+
+
+                        /*ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams)holder.commentDateText.getLayoutParams();
+                        params.setMargins(8, 8, 0, 8); //substitute parameters for left, top, right, bottom
+                        holder.commentDateText.setLayoutParams(params);*/
+
+
+                    }
+                });
 
 
             }else {

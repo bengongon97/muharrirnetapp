@@ -39,6 +39,7 @@ public class PostActivity extends AppCompatActivity {
     ProgressDialog progressDialog; //DEPRECATED! OMG!
     BlogPost gottenPost;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,7 +57,7 @@ public class PostActivity extends AppCompatActivity {
         final TextView commentAuthorNameText = findViewById(R.id.commentAuthorNameText);
         final TextView commentDateText = findViewById(R.id.commentDateText);
         final TextView commentContentText = findViewById(R.id.commentContentText);
-
+        final TextView commentsTitle = findViewById(R.id.commentsTitle);
 
         String postId= getIntent().getStringExtra("postId");
 
@@ -191,9 +192,14 @@ public class PostActivity extends AppCompatActivity {
                     //Comments will be handled in adapter
 
                     RecyclerView commentsRecyclerView = findViewById(R.id.commentsRecyclerView);
-                    commentsRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL));
+                    RecyclerView.LayoutManager newManager = new StaggeredGridLayoutManager(1, StaggeredGridLayoutManager.VERTICAL);
+                    commentsRecyclerView.setLayoutManager(newManager);
 
-                    CommentAdapter commentAdapter = new CommentAdapter(PostActivity.this,gottenPost.getEmbedded().getComments(),gottenPost);
+                    CommentAdapter commentAdapter = new CommentAdapter(PostActivity.this,gottenPost.getEmbedded().getComments(),gottenPost,newManager);
+
+                    String textConcatenate = "Yorumlar  (" + gottenPost.getEmbedded().getComments().get(0).size()+ " Adet)";
+                    commentsTitle.setText(textConcatenate);
+
 
                     ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(commentAdapter);
                     scaleInAnimationAdapter.setFirstOnly(false);

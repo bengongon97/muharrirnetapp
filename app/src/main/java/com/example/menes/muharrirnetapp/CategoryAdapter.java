@@ -1,30 +1,22 @@
 package com.example.menes.muharrirnetapp;
 
-import android.content.Context;
-import android.database.DataSetObserver;
 import android.support.annotation.NonNull;
-import android.support.design.widget.FloatingActionButton;
-import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
-import android.widget.ListAdapter;
 import android.widget.TextView;
-
-import java.lang.reflect.Array;
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.CategoryView> {
 
     private CategoryAdapter.OnItemClickListener onItemClickListener;
     private List<String> categories;
+    private List<String> details;
 
-    public CategoryAdapter(List<String> categories) {
+    public CategoryAdapter(List<String> categories,List<String> details) {
         this.categories = categories;
+        this.details = details;
     }
 
     public interface OnItemClickListener {
@@ -34,20 +26,19 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     class CategoryView extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView categoryName;
-        FloatingActionButton button;
+        TextView categoryDetail;
 
         private  CategoryView(View itemView){
             super(itemView);
             itemView.setOnClickListener(this);
-
-            categoryName =itemView.findViewById(R.id.category_name);
-            button = itemView.findViewById(R.id.category_button);
+            categoryName = itemView.findViewById(R.id.categoryName);
+            categoryDetail = itemView.findViewById(R.id.categoryDetail);
         }
 
         @Override
         public void onClick(View v) {
             if (onItemClickListener != null) {
-                onItemClickListener.onItemClick(R.id.category_button);
+                onItemClickListener.onItemClick(R.id.categoryName);
             }
         }
     }
@@ -61,7 +52,10 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
 
     @Override
     public void onBindViewHolder(@NonNull CategoryView holder, int position) {
-
+        String categoryName = categories.get(holder.getAdapterPosition());
+        String categoryDetail = details.get(holder.getAdapterPosition());
+        holder.categoryName.setText(categoryName);
+        holder.categoryDetail.setText(categoryDetail);
     }
 
     public void setOnItemClickListener(CategoryAdapter.OnItemClickListener onItemClickListener) {
@@ -72,7 +66,5 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
     public int getItemCount() {
         return categories.size();
     }
-
-
 }
 

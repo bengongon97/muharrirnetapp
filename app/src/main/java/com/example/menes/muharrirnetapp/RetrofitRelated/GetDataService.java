@@ -18,6 +18,12 @@ public interface GetDataService {
      *  ?offset=x starts from the xth record and retrieves a page
      *  /wp-json/wp/v2/posts?_embed&search=something --> all the posts with search term "something"
      */
+
+    //http://muharrir.net/wp-json/wp/v2/categories -> returns the categories. But I won't use for now.
+
+    @GET("posts") //this must be only titles, somehow.
+    Call<List<BlogPost>> getSuggestions(@Query("search") String query);
+
     @GET("posts?_embed")
     Call<List<BlogPost>> getSearchResults(@Query("search") String query);
 

@@ -2,6 +2,7 @@
     <string name="app_name">Muharrir.net</string>
     <string name="err_resp">"Başarılı bir cevap alamadık, lütfen tekrar deneyin."</string>
     <string name="err_fail">"Bir şeyler yanlış gitti. Lütfen tekrar deneyin."</string>
+    <string name="err_sugg">"Arama önerileri yüklenemiyor."</string>
     <string name="loading_msg">"Yükleniyor..."</string>
     <string-array name="categories">
         <item>Lisan</item>
@@ -10,5 +11,13 @@
         <item>İçtimai</item>
         <item>Teknoloji</item>
         <item>Hakkımızda</item>
+    </string-array>
+    <string-array name="details">
+        <item>Lisan kategori açıklaması</item>
+        <item>Maarif kategori açıklaması</item>
+        <item>İktisat kategori açıklaması</item>
+        <item>İçtimai kategori açıklaması</item>
+        <item>Teknoloji kategori açıklaması</item>
+        <item>Yazarlar ve geliştiriciler hakkında</item>
     </string-array>
 </resources>

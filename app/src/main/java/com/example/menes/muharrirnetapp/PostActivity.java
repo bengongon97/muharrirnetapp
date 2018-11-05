@@ -197,8 +197,14 @@ public class PostActivity extends AppCompatActivity {
 
                     CommentAdapter commentAdapter = new CommentAdapter(PostActivity.this,gottenPost.getEmbedded().getComments(),gottenPost,newManager);
 
-                    String textConcatenate = "Yorumlar  (" + gottenPost.getEmbedded().getComments().get(0).size()+ " Adet)";
-                    commentsTitle.setText(textConcatenate);
+
+                    if(gottenPost.getEmbedded().getComments()!= null){
+                        String textConcatenate = "Yorumlar  (" + gottenPost.getEmbedded().getComments().get(0).size()+ " Adet)";
+                        commentsTitle.setText(textConcatenate);
+                    }
+                    else{
+                        commentsTitle.setText("Yorum bulunamadı.");
+                    }
 
 
                     ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(commentAdapter);
